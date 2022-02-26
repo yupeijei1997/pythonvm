@@ -29,3 +29,15 @@ FunctionObject::FunctionObject(HiObject* code_object) {
 
     set_klass(FunctionKlass::get_instance());
 }
+
+void FunctionObject::set_defaults(ArrayList<HiObject*>* defaults) {
+    if (defaults == nullptr) {
+        _defaults = nullptr;
+        return;
+    }
+
+    _defaults = new ArrayList<HiObject*>(defaults->length());
+    for (int i = 0; i < defaults->length(); ++i) {
+        _defaults->set(i, defaults->get(i));
+    }
+}

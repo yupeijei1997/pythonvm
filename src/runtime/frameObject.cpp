@@ -22,9 +22,18 @@ FrameObject::FrameObject(FunctionObject* func, ArrayList<HiObject*>* args) {
 
     _locals = new Map<HiObject*, HiObject*>();
     _globals = func->globals();
-    _fast_locals = nullptr;
+    _fast_locals = new ArrayList<HiObject*>();
+    
+    if (func->defaults()) {
+        int dft_cnt = func->defaults()->length();
+        int argcnt = _codes->_argcount;
+
+        while (dft_cnt--) {
+            _fast_locals->set(--argcnt, func->defaults()->get(dft_cnt));
+        }
+    }
+
     if (args) {
-        _fast_locals = new ArrayList<HiObject*>();
         for (int i = 0; i < args->length(); ++i) {
             _fast_locals->set(i, args->get(i));
         }
