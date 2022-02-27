@@ -22,6 +22,29 @@ Interpreter::Interpreter() {
     _builtins->put(new HiString("True"), Universe::HiTrue);
     _builtins->put(new HiString("False"), Universe::HiFalse);
     _builtins->put(new HiString("None"), Universe::HiNone);
+    _builtins->put(new HiString("len"), new FunctionObject(len));
+}
+
+void Interpreter::build_frame(HiObject* callable, ArrayList<HiObject*>* args) {
+    if (callable->klass() == NativeFunctionKlass::get_instance()) {
+        PUSH(((FunctionObject*)callable)->call(args));
+    }
+    else if (callable->klass() == FunctionKlass::get_instance()) {
+        FrameObject* frame = new FrameObject((FunctionObject*)callable, args);
+        frame->set_sender(_frame);
+        _frame = frame;
+    }
+}
+
+void Interpreter::destory_frame() {
+    FrameObject* temp = _frame;
+    _frame = _frame->sender();
+    delete temp;
+}
+
+void Interpreter::leave_frame() {
+    destory_frame();
+    PUSH(_ret_value);
 }
 
 void Interpreter::run(CodeObject* codes) {
@@ -81,7 +104,18 @@ void Interpreter::eval_frame() {
         case ByteCode::LOAD_GLOBAL:
             v = _frame->names()->get(op_arg);
             w = _frame->globals()->get(v);
-            PUSH(w);
+            if (w != Universe::HiNone) {
+                PUSH(w);
+                break;
+            }
+            
+            w = _builtins->get(v);
+            if (w != Universe::HiNone) {
+                PUSH(w);
+                break;
+            }
+
+            PUSH(Universe::HiNone);
             break;
 
         case ByteCode::LOAD_FAST:
@@ -248,21 +282,4 @@ void Interpreter::eval_frame() {
             printf("Error: Unrecognized byte code %d\n", op_code);
         }
     }
-}
-
-void Interpreter::destory_frame() {
-    FrameObject* temp = _frame;
-    _frame = _frame->sender();
-    delete temp;
-}
-
-void Interpreter::build_frame(HiObject* callable, ArrayList<HiObject*>* args) {
-    FrameObject* frame = new FrameObject((FunctionObject*)callable, args);
-    frame->set_sender(_frame);
-    _frame = frame;
-}
-
-void Interpreter::leave_frame() {
-    destory_frame();
-    PUSH(_ret_value);
 }

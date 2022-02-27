@@ -44,6 +44,9 @@ void StringKlass::print(HiObject* obj) {
     }
 }
 
+HiObject* StringKlass::len(HiObject* obj) {
+    return new HiInteger(((HiString*)obj)->length());
+}
 
 HiString::HiString(const char* x) {
     _length = strlen(x);
@@ -62,9 +65,4 @@ HiString::HiString(const char* x, int length) {
     }
 
     set_klass(StringKlass::get_instance());
-}
-
-HiString::~HiString() {
-    delete[] _value;
-    _value = nullptr;
 }

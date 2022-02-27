@@ -32,7 +32,8 @@
 *.app
 
 # Compiled python files
-.pyc
+*.pyc
+tools/result*
 
 # Cmake generated files
 build/
@@ -43,4 +44,4 @@ build/
 
 # personal test files
 /test/personal_test
-
+personal_readme.md

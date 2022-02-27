@@ -27,6 +27,8 @@ public:
     HiObject* mul(HiObject* x);
     HiObject* div(HiObject* x);
     HiObject* mod(HiObject* x);
+
+    HiObject* len();
 };
 
 #endif

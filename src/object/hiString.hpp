@@ -15,6 +15,7 @@ public:
     virtual HiObject* equal(HiObject* x, HiObject* y);
 
     virtual void print(HiObject* obj);
+    virtual HiObject* len(HiObject* obj);
 };
 
 class HiString : public HiObject {
@@ -25,7 +26,6 @@ private:
 public:
     HiString(const char* x);
     HiString(const char* x, int length);
-    ~HiString();
 
     const char* value() { return _value; }
     int length() { return _length; }
