@@ -9,6 +9,7 @@ ADD_EXECUTABLE(main main.cpp
     object/hiObject.cpp
     object/hiInteger.cpp
     object/hiString.cpp
+    object/hiList.cpp
     util/arrayList.cpp
     code/codeObject.cpp
     code/binaryFileParser.cpp

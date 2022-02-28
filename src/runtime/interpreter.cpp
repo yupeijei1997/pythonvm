@@ -7,6 +7,7 @@
 #include "code/codeObject.hpp"
 #include "code/bytecode.hpp"
 #include "util/map.hpp"
+#include "object/hiList.hpp"
 
 #define PUSH(x) _frame->stack()->add(x)
 #define POP() _frame->stack()->pop()
@@ -290,6 +291,14 @@ void Interpreter::eval_frame() {
                 delete args;
                 args = nullptr;
             }
+            break;
+
+        case ByteCode::BUILD_LIST:
+            v = new HiList();
+            while (op_arg--) {
+                ((HiList*)v)->set(op_arg, POP());
+            }
+            PUSH(v);
             break;
 
         default:
