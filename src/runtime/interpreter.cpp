@@ -160,6 +160,12 @@ void Interpreter::eval_frame() {
             printf("\n");
             break;
 
+        case ByteCode::BINARY_SUBSCR:
+            v = POP();
+            w = POP();
+            PUSH(w->subscr(v));
+            break;
+
         case ByteCode::BINARY_ADD:
             v = POP();
             w = POP();

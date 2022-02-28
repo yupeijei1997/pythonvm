@@ -16,6 +16,7 @@ public:
 
     virtual void print(HiObject* obj);
     virtual HiObject* len(HiObject* obj);
+    virtual HiObject* subscr(HiObject* x, HiObject* y);
 };
 
 class HiString : public HiObject {

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "object/hiList.hpp"
+#include "object/hiInteger.hpp"
 
 HiList::HiList() {
     _inner_list = new ArrayList<HiObject*>();
@@ -36,6 +37,16 @@ void ListKlass::print(HiObject* obj) {
         printf(",");
         lst_obj->inner_list()->get(i)->print();
     }
-    
+
     printf("]");
+}
+
+HiObject* ListKlass::subscr(HiObject* x, HiObject* y) {
+    assert(x && x->klass() == this);
+    assert(y && y->klass() == IntegerKlass::get_instance());
+
+    HiList* lx = (HiList*)x;
+    HiInteger* iy = (HiInteger*)y;
+
+    return lx->inner_list()->get(iy->value());
 }

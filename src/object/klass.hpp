@@ -41,6 +41,7 @@ public:
     virtual HiObject* mod(HiObject* x, HiObject* y) { return 0; }
 
     virtual HiObject* len(HiObject* x) { return 0; }
+    virtual HiObject* subscr(HiObject* x, HiObject* y) { return 0; }
     virtual HiObject* call(ArrayList<HiObject*>* args) { return 0; }
 };
 

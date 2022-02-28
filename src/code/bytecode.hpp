@@ -2,6 +2,7 @@ class ByteCode {
 public:
     static const unsigned char POP_TOP = 1;
     static const unsigned char BINARY_ADD = 23;
+    static const unsigned char BINARY_SUBSCR = 25;
 
     static const unsigned char PRINT_ITEM = 71;
     static const unsigned char PRINT_NEWLINE = 72;
