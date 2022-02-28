@@ -58,6 +58,58 @@ HiObject* StringKlass::subscr(HiObject* x, HiObject* y) {
     return new HiString(&(sx->value()[iy->value()]), 1);
 }
 
+HiObject* StringKlass::contains(HiObject* x, HiObject* y) {
+    assert(x && x->klass() == this);
+    assert(y && y->klass() == this);
+
+    HiString* sx = (HiString*)x;
+    HiString* sy = (HiString*)y;
+
+    int sx_size = sx->length();
+    int sy_size = sy->length();
+
+    if (sy_size == 0) {
+        return Universe::HiTrue;
+    }
+
+    // 1. 求 next 数组，即模式串 p 的各个子串的最长公共前后缀的长度
+    ArrayList<int>* next = new ArrayList<int>(sy_size);
+    next->set(0, 0);
+    for (int j = 0, i = 1; i < sy_size; ++i) {
+        while (j > 0 && sy->value()[j] != sy->value()[i]) {
+            j = next->get(j - 1);
+        }
+        if (sy->value()[j] == sy->value()[i]) {
+            ++j;
+        }
+        next->set(i, j);
+    }
+
+    // 2. 主串 s 和模式串 p 进行匹配
+    for (int i = 0, j = 0; i < sx_size; ++i) {
+        while (j > 0 && sx->value()[i] != sy->value()[j]) {
+            j = next->get(j - 1);
+        }
+        if (sx->value()[i] == sy->value()[j]) {
+            ++j;
+        }
+        if (j == sy_size) {
+            return Universe::HiTrue;
+        }
+    }
+
+    return Universe::HiFalse;
+}
+
+HiObject* StringKlass::not_contains(HiObject* x, HiObject* y) {
+    if (contains(x, y) == Universe::HiTrue) {
+        return Universe::HiFalse;
+    }
+    else {
+        return Universe::HiTrue;
+    }
+}
+
 HiString::HiString(const char* x) {
     _length = strlen(x);
     _value = new char[_length];

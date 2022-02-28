@@ -16,6 +16,8 @@ public:
     virtual void print(HiObject* obj);
     
     virtual HiObject* subscr(HiObject* x, HiObject* y);
+    virtual HiObject* contains(HiObject* x, HiObject* y);
+    virtual HiObject* not_contains(HiObject* x, HiObject* y);
 };
 
 class HiList : public HiObject {

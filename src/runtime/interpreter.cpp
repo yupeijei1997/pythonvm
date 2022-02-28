@@ -209,6 +209,14 @@ void Interpreter::eval_frame() {
                 PUSH(w->ge(v));
                 break;
 
+            case ByteCode::IN:
+                PUSH(v->contains(w));
+                break;
+
+            case ByteCode::NOT_IN:
+                PUSH(v->not_contains(w));
+                break;
+
             case ByteCode::IS:
                 if (w == v) {
                     PUSH(HI_TRUE);

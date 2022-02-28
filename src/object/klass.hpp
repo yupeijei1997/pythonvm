@@ -42,6 +42,8 @@ public:
 
     virtual HiObject* len(HiObject* x) { return 0; }
     virtual HiObject* subscr(HiObject* x, HiObject* y) { return 0; }
+    virtual HiObject* contains(HiObject* x, HiObject* y) { return 0; }
+    virtual HiObject* not_contains(HiObject* x, HiObject* y) { return 0; }
     virtual HiObject* call(ArrayList<HiObject*>* args) { return 0; }
 };
 

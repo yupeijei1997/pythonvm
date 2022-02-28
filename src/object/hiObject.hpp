@@ -29,6 +29,8 @@ public:
 
     HiObject* len();
     HiObject* subscr(HiObject* x);
+    HiObject* contains(HiObject* x);
+    HiObject* not_contains(HiObject* x);
 
     HiObject* getattr(HiObject* x);
 };

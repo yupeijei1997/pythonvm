@@ -92,3 +92,5 @@ template class ArrayList<HiObject*>;
 template class ArrayList<HiString*>;
 
 template class ArrayList<Block*>;
+
+template class ArrayList<int>;
