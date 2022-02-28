@@ -1,5 +1,7 @@
 #include <stdio.h>
-#include "functionObject.hpp"
+#include <assert.h>
+#include "runtime/functionObject.hpp"
+#include "runtime/universe.hpp"
 
 FunctionKlass* FunctionKlass::instance = nullptr;
 
@@ -77,4 +79,66 @@ HiObject* len(ArrayList<HiObject*>* args) {
 
 HiObject* FunctionObject::call(ArrayList<HiObject*>* args) {
     return _native_func(args);
+}
+
+/*
+ * Method for HiString class.
+ */
+
+HiObject* string_upper(ArrayList<HiObject*>* args) {
+    HiObject* arg0 = args->get(0);
+    assert(arg0->klass() == StringKlass::get_instance());
+
+    HiString* str_obj = (HiString*)arg0;
+    int length = str_obj->length();
+    if (length <= 0) {
+        return Universe::HiNone;
+    }
+
+    char* v = new char[length];
+    char c;
+    for (int i = 0; i < length; ++i) {
+        c = str_obj->value()[i];
+        // convert to upper
+        if (c >= 'a' && c <= 'z') {
+            v[i] = c - 0x20;
+        }
+        else {
+            v[i] = c;
+        }
+    }
+
+    HiString* s = new HiString(v, length);
+    delete[] v;
+    return s;
+}
+
+MethodKlass* MethodKlass::instance = nullptr;
+
+MethodKlass* MethodKlass::get_instance() {
+    if (instance == nullptr) {
+        instance = new MethodKlass();
+    }
+
+    return instance;
+}
+
+MethodKlass::MethodKlass() {
+    set_klass_dict(new Map<HiObject*, HiObject*>());
+}
+
+bool MethodObject::is_function(HiObject* x) {
+    Klass* k = x->klass();
+    if (k == (Klass*)FunctionKlass::get_instance()) {
+        return true;
+    }
+
+    while (k->super() != nullptr) {
+        k = k->super();
+        if (k == (Klass*)FunctionKlass::get_instance()) {
+            return true;
+        }
+    }
+
+    return false;
 }

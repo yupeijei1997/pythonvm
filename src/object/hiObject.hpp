@@ -12,7 +12,6 @@ public:
     Klass* klass() { assert(_klass != nullptr); return _klass; }
     void set_klass(Klass* klass) { _klass = klass; }
 
-
     virtual void print();
 
     HiObject* greater(HiObject* x);
@@ -29,6 +28,8 @@ public:
     HiObject* mod(HiObject* x);
 
     HiObject* len();
+    
+    HiObject* getattr(HiObject* x);
 };
 
 #endif

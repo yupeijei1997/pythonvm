@@ -29,6 +29,14 @@ void Interpreter::build_frame(HiObject* callable, ArrayList<HiObject*>* args) {
     if (callable->klass() == NativeFunctionKlass::get_instance()) {
         PUSH(((FunctionObject*)callable)->call(args));
     }
+    else if (callable->klass() == MethodKlass::get_instance()) {
+        MethodObject* method = (MethodObject*)callable;
+        if (!args) {
+            args = new ArrayList<HiObject*>(1);
+        }
+        args->insert(0, method->owner());
+        build_frame(method->func(), args);
+    }
     else if (callable->klass() == FunctionKlass::get_instance()) {
         FrameObject* frame = new FrameObject((FunctionObject*)callable, args);
         frame->set_sender(_frame);
@@ -120,6 +128,12 @@ void Interpreter::eval_frame() {
 
         case ByteCode::LOAD_FAST:
             PUSH(_frame->fast_locals()->get(op_arg));
+            break;
+
+        case ByteCode::LOAD_ATTR:
+            v = POP();
+            w = _frame->names()->get(op_arg);
+            PUSH(v->getattr(w));
             break;
 
         case ByteCode::STORE_NAME:

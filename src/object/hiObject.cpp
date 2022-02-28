@@ -1,4 +1,6 @@
 #include "object/hiObject.hpp"
+#include "runtime/universe.hpp"
+#include "runtime/functionObject.hpp"
 
 void HiObject::print() {
     klass()->print(this);
@@ -50,4 +52,16 @@ HiObject* HiObject::mod(HiObject* rhs) {
 
 HiObject* HiObject::len() {
     return klass()->len(this);
+}
+
+HiObject* HiObject::getattr(HiObject* x) {
+    HiObject* result = klass()->klass_dict()->get(x);
+    if (result == Universe::HiNone) {
+        return result;
+    }
+
+    if (MethodObject::is_function(result)) {
+        result = new MethodObject(this, (FunctionObject*)result);
+    }
+    return result;
 }

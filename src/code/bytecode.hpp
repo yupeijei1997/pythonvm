@@ -15,6 +15,7 @@ public:
     static const unsigned char LOAD_CONST = 100;
     static const unsigned char LOAD_NAME = 101;
 
+    static const unsigned char LOAD_ATTR = 106;
     static const unsigned char COMPARE_OP = 107;
     static const unsigned char JUMP_FORWARD = 110;
     static const unsigned char JUMP_ABSOLUTE = 113;
