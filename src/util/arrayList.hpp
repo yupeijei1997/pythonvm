@@ -13,7 +13,6 @@ private:
 
 public:
     ArrayList(int n = 8);
-    ~ArrayList();
 
     void add(T t);
     void insert(int index, T t);

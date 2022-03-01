@@ -13,13 +13,6 @@ ArrayList<T>::ArrayList(int n) {
 }
 
 template<typename T>
-ArrayList<T>::~ArrayList() {
-    delete[] _array;
-    _array = nullptr;
-}
-
-
-template<typename T>
 void ArrayList<T>::add(T t) {
     if (_size >= _length) {
         expand();

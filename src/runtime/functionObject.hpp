@@ -7,11 +7,6 @@
 #include "object/hiString.hpp"
 #include "util/map.hpp"
 
-HiObject* len(ArrayList<HiObject*>* args);
-HiObject* string_upper(ArrayList<HiObject*>* args);
-
-typedef HiObject* (*NativeFuncPointer)(ArrayList<HiObject*>* args);
-
 class FunctionKlass : public Klass {
 private:
     FunctionKlass() {}
@@ -31,6 +26,10 @@ private:
 public:
     static NativeFunctionKlass* get_instance();
 };
+
+HiObject* len(ArrayList<HiObject*>* args);
+
+typedef HiObject* (*NativeFuncPointer)(ArrayList<HiObject*>* args);
 
 class FunctionObject : public HiObject {
 friend class FunctionKlass;

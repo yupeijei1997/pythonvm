@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include "object/hiList.hpp"
 #include "object/hiInteger.hpp"
+#include "object/hiString.hpp"
+#include "runtime/functionObject.hpp"
 #include "runtime/universe.hpp"
 
 HiList::HiList() {
@@ -21,6 +23,13 @@ ListKlass* ListKlass::get_instance() {
     }
 
     return instance;
+}
+
+ListKlass::ListKlass() {
+    Map<HiObject*, HiObject*>* klass_dict = new Map<HiObject*, HiObject*>();
+    klass_dict->put(new HiString("append"), new FunctionObject(list_append));
+    klass_dict->put(new HiString("insert"), new FunctionObject(list_insert));
+    set_klass_dict(klass_dict);
 }
 
 void ListKlass::print(HiObject* obj) {
@@ -74,4 +83,14 @@ HiObject* ListKlass::not_contains(HiObject* x, HiObject* y) {
     else {
         return Universe::HiTrue;
     }
+}
+
+HiObject* list_append(ArrayList<HiObject*>* args) {
+    ((HiList*)(args->get(0)))->append(args->get(1));
+    return Universe::HiNone;
+}
+
+HiObject* list_insert(ArrayList<HiObject*>* args) {
+    ((HiList*)(args->get(0)))->insert(((HiInteger*)(args->get(1)))->value(), args->get(2));
+    return Universe::HiNone;
 }

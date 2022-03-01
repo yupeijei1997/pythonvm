@@ -34,4 +34,6 @@ public:
     int length() { return _length; }
 };
 
+HiObject* string_upper(ArrayList<HiObject*>* args);
+
 #endif

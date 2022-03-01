@@ -128,3 +128,31 @@ HiString::HiString(const char* x, int length) {
 
     set_klass(StringKlass::get_instance());
 }
+
+HiObject* string_upper(ArrayList<HiObject*>* args) {
+    HiObject* arg0 = args->get(0);
+    assert(arg0->klass() == StringKlass::get_instance());
+
+    HiString* str_obj = (HiString*)arg0;
+    int length = str_obj->length();
+    if (length <= 0) {
+        return Universe::HiNone;
+    }
+
+    char* v = new char[length];
+    char c;
+    for (int i = 0; i < length; ++i) {
+        c = str_obj->value()[i];
+        // convert to upper
+        if (c >= 'a' && c <= 'z') {
+            v[i] = c - 0x20;
+        }
+        else {
+            v[i] = c;
+        }
+    }
+
+    HiString* s = new HiString(v, length);
+    delete[] v;
+    return s;
+}

@@ -7,7 +7,7 @@
 
 class ListKlass : public Klass {
 private:
-    ListKlass() {}
+    ListKlass();
     static ListKlass* instance;
 
 public:
@@ -34,10 +34,14 @@ public:
 
     int size() { return _inner_list->size(); }
     void append(HiObject* obj) { _inner_list->add(obj); }
+    void insert(int i, HiObject* o) { _inner_list->insert(i, o); }
     HiObject* pop(HiObject* obj) { return _inner_list->pop(); }
     HiObject* get(int index) { return _inner_list->get(index); }
     void set(int i, HiObject* o) { _inner_list->set(i, o); }
     HiObject* top() { get(size() - 1); }
 };
+
+HiObject* list_append(ArrayList<HiObject*>* args);
+HiObject* list_insert(ArrayList<HiObject*>* args);
 
 #endif
