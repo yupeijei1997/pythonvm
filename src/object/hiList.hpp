@@ -19,6 +19,7 @@ public:
     virtual HiObject* contains(HiObject* x, HiObject* y);
     virtual HiObject* not_contains(HiObject* x, HiObject* y);
     virtual void store_subscr(HiObject* x, HiObject* y, HiObject* z);
+    virtual void del_subscr(HiObject* x, HiObject* y);
 };
 
 class HiList : public HiObject {
@@ -36,14 +37,17 @@ public:
     int size() { return _inner_list->size(); }
     void append(HiObject* obj) { _inner_list->add(obj); }
     void insert(int i, HiObject* o) { _inner_list->insert(i, o); }
-    HiObject* pop(HiObject* obj) { return _inner_list->pop(); }
+    HiObject* pop() { return _inner_list->pop(); }
     HiObject* get(int index) { return _inner_list->get(index); }
     void set(int i, HiObject* o) { _inner_list->set(i, o); }
-    HiObject* top() { get(size() - 1); }
+    HiObject* top() { return get(size() - 1); }
+    void delete_index(int index) { return _inner_list->delete_index(index); }
 };
 
 HiObject* list_append(ArrayList<HiObject*>* args);
 HiObject* list_insert(ArrayList<HiObject*>* args);
 HiObject* list_index(ArrayList<HiObject*>* args);
+HiObject* list_pop(ArrayList<HiObject*>* args);
+HiObject* list_remove(ArrayList<HiObject*>* args);
 
 #endif

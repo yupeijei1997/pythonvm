@@ -70,6 +70,10 @@ void HiObject::store_subscr(HiObject* x, HiObject* y) {
     klass()->store_subscr(this, x, y);
 }
 
+void HiObject::del_subscr(HiObject* x) {
+    klass()->del_subscr(this, x);
+}
+
 HiObject* HiObject::getattr(HiObject* x) {
     HiObject* result = klass()->klass_dict()->get(x);
     if (result == Universe::HiNone) {

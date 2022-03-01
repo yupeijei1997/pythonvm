@@ -158,6 +158,12 @@ void Interpreter::eval_frame() {
             v->store_subscr(u, w);
             break;
 
+        case ByteCode::DELETE_SUBSCR:
+            v = POP();
+            w = POP();
+            w->del_subscr(v);
+            break;
+
         case ByteCode::PRINT_ITEM:
             v = POP();
             v->print();
