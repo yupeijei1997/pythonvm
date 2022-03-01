@@ -44,5 +44,6 @@ public:
 
 HiObject* list_append(ArrayList<HiObject*>* args);
 HiObject* list_insert(ArrayList<HiObject*>* args);
+HiObject* list_index(ArrayList<HiObject*>* args);
 
 #endif
