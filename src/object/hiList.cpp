@@ -85,6 +85,16 @@ HiObject* ListKlass::not_contains(HiObject* x, HiObject* y) {
     }
 }
 
+void ListKlass::store_subscr(HiObject* x, HiObject* y, HiObject* z) {
+    assert(x && x->klass() == this);
+    assert(y && y->klass() == IntegerKlass::get_instance());
+
+    HiList* lx = (HiList*)x;
+    HiInteger* iy = (HiInteger*)y;
+
+    lx->inner_list()->set(iy->value(), z);
+}
+
 HiObject* list_append(ArrayList<HiObject*>* args) {
     ((HiList*)(args->get(0)))->append(args->get(1));
     return Universe::HiNone;

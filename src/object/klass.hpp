@@ -44,6 +44,7 @@ public:
     virtual HiObject* subscr(HiObject* x, HiObject* y) { return 0; }
     virtual HiObject* contains(HiObject* x, HiObject* y) { return 0; }
     virtual HiObject* not_contains(HiObject* x, HiObject* y) { return 0; }
+    virtual void store_subscr(HiObject* x, HiObject* y, HiObject* z) { return; }
     virtual HiObject* call(ArrayList<HiObject*>* args) { return 0; }
 };
 

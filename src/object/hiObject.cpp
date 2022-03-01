@@ -66,6 +66,10 @@ HiObject* HiObject::not_contains(HiObject* x) {
     return klass()->not_contains(this, x);
 }
 
+void HiObject::store_subscr(HiObject* x, HiObject* y) {
+    klass()->store_subscr(this, x, y);
+}
+
 HiObject* HiObject::getattr(HiObject* x) {
     HiObject* result = klass()->klass_dict()->get(x);
     if (result == Universe::HiNone) {

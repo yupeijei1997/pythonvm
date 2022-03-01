@@ -18,6 +18,7 @@ public:
     virtual HiObject* subscr(HiObject* x, HiObject* y);
     virtual HiObject* contains(HiObject* x, HiObject* y);
     virtual HiObject* not_contains(HiObject* x, HiObject* y);
+    virtual void store_subscr(HiObject* x, HiObject* y, HiObject* z);
 };
 
 class HiList : public HiObject {

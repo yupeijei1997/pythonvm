@@ -73,7 +73,7 @@ void Interpreter::eval_frame() {
             op_arg = _frame->get_op_arg();
         }
 
-        HiObject* v, * w;
+        HiObject* u, * v, * w;
         Block* b;
         FunctionObject* fo;
         ArrayList<HiObject*>* args = nullptr;
@@ -149,6 +149,13 @@ void Interpreter::eval_frame() {
 
         case ByteCode::STORE_FAST:
             _frame->fast_locals()->set(op_arg, POP());
+            break;
+
+        case ByteCode::STORE_SUBSCR:
+            u = POP();
+            v = POP();
+            w = POP();
+            v->store_subscr(u, w);
             break;
 
         case ByteCode::PRINT_ITEM:
