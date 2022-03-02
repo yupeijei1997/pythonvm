@@ -85,3 +85,7 @@ HiObject* HiObject::getattr(HiObject* x) {
     }
     return result;
 }
+
+HiObject* HiObject::iter() {
+    return klass()->iter(this);
+}

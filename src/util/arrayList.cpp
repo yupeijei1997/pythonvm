@@ -81,6 +81,11 @@ T ArrayList<T>::pop() {
 }
 
 template<typename T>
+T ArrayList<T>::top() {
+    return _array[_size - 1];
+}
+
+template<typename T>
 void ArrayList<T>::delete_index(int index) {
     for (int i = index; i + 1 < _size; ++i) {
         _array[i] = _array[i + 1];

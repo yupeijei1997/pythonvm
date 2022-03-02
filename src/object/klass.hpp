@@ -47,6 +47,7 @@ public:
     virtual HiObject* not_contains(HiObject* x, HiObject* y) { return 0; }
     virtual void store_subscr(HiObject* x, HiObject* y, HiObject* z) { return; }
     virtual void del_subscr(HiObject* x, HiObject* y) { return; }
+    virtual HiObject* iter(HiObject* x) { return 0; }
     virtual HiObject* call(ArrayList<HiObject*>* args) { return 0; }
 };
 

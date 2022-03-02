@@ -21,6 +21,7 @@ public:
     virtual HiObject* not_contains(HiObject* x, HiObject* y);
     virtual void store_subscr(HiObject* x, HiObject* y, HiObject* z);
     virtual void del_subscr(HiObject* x, HiObject* y);
+    virtual HiObject* iter(HiObject* x);
 };
 
 class HiList : public HiObject {
@@ -52,5 +53,29 @@ HiObject* list_pop(ArrayList<HiObject*>* args);
 HiObject* list_remove(ArrayList<HiObject*>* args);
 HiObject* list_reverse(ArrayList<HiObject*>* args);
 HiObject* list_sort(ArrayList<HiObject*>* args);
+
+class ListIteratorKlass : public Klass {
+private:
+    ListIteratorKlass();
+    static ListIteratorKlass* instance;
+
+public:
+    static ListIteratorKlass* get_instance();
+};
+
+class ListIterator : public HiObject {
+private:
+    HiList* _owner;
+    int _iter_cnt;
+
+public:
+    ListIterator(HiList* owner);
+
+    HiList* owner() { return _owner; }
+    int iter_cnt() { return _iter_cnt; }
+    void inc_cnt() { ++_iter_cnt; }
+};
+
+HiObject* listiterator_next(ArrayList<HiObject*>* args);
 
 #endif

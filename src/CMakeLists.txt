@@ -18,6 +18,7 @@ ADD_EXECUTABLE(main main.cpp
     runtime/universe.cpp
     runtime/frameObject.cpp
     runtime/functionObject.cpp
+    runtime/stringTable.cpp
     util/map.cpp)
 
 INCLUDE_DIRECTORIES(./)

@@ -4,6 +4,7 @@
 #include "runtime/interpreter.hpp"
 #include "runtime/universe.hpp"
 #include "runtime/functionObject.hpp"
+#include "runtime/stringTable.hpp"
 #include "code/codeObject.hpp"
 #include "code/bytecode.hpp"
 #include "util/map.hpp"
@@ -11,6 +12,7 @@
 
 #define PUSH(x) _frame->stack()->add(x)
 #define POP() _frame->stack()->pop()
+#define TOP() _frame->stack()->top()
 #define STACK_LEVEL() _frame->stack()->size()
 
 #define HI_TRUE Universe::HiTrue
@@ -326,6 +328,22 @@ void Interpreter::eval_frame() {
                 ((HiList*)v)->set(op_arg, POP());
             }
             PUSH(v);
+            break;
+
+        case ByteCode::GET_ITER:
+            v = POP();
+            PUSH(v->iter());
+            break;
+
+        case ByteCode::FOR_ITER:
+            v = TOP();
+            w = v->getattr(StringTable::get_instance()->next_str);
+            build_frame(w, nullptr);
+            
+           if (TOP() == nullptr) {
+                _frame->set_pc(_frame->_pc + op_arg);
+                POP();
+            }
             break;
 
         default:

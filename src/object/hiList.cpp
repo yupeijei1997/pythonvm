@@ -143,6 +143,11 @@ void ListKlass::del_subscr(HiObject* x, HiObject* y) {
     lx->delete_index(iy->value());
 }
 
+HiObject* ListKlass::iter(HiObject* x) {
+    assert(x && x->klass() == this);
+    return new ListIterator((HiList*)x);
+}
+
 HiObject* list_append(ArrayList<HiObject*>* args) {
     ((HiList*)(args->get(0)))->append(args->get(1));
     return Universe::HiNone;
@@ -223,4 +228,46 @@ HiObject* list_sort(ArrayList<HiObject*>* args) {
         }
     }
     return Universe::HiNone;
+}
+
+/*
+ * ListIterator 
+ */
+
+ListIteratorKlass* ListIteratorKlass::instance = nullptr;
+
+ListIteratorKlass* ListIteratorKlass::get_instance() {
+    if (instance == nullptr) {
+        instance = new ListIteratorKlass();
+    }
+
+    return instance;
+}
+
+ListIteratorKlass::ListIteratorKlass() {
+    Map<HiObject*, HiObject*>* klass_dict = new Map<HiObject*, HiObject*>();
+    klass_dict->put(new HiString("next"), new FunctionObject(listiterator_next));
+    set_klass_dict(klass_dict);
+}
+
+ListIterator::ListIterator(HiList* owner) {
+    _owner = owner;
+    _iter_cnt = 0;
+    set_klass(ListIteratorKlass::get_instance());
+}
+
+HiObject* listiterator_next(ArrayList<HiObject*>* args) {
+    ListIterator* iter = (ListIterator*)(args->get(0));
+    assert(iter && iter->klass() == ListIteratorKlass::get_instance());
+
+    HiList* alist = iter->owner();
+    int iter_cnt = iter->iter_cnt();
+    if (iter_cnt < alist->size()) {
+        HiObject* obj = alist->get(iter_cnt);
+        iter->inc_cnt();
+        return obj;
+    }
+    else {
+        return nullptr;
+    }
 }
