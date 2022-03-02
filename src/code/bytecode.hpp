@@ -1,6 +1,7 @@
 class ByteCode {
 public:
     static const unsigned char POP_TOP = 1;
+    static const unsigned char BINARY_MULTIPLY = 20;
     static const unsigned char BINARY_ADD = 23;
     static const unsigned char BINARY_SUBSCR = 25;
 

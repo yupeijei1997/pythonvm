@@ -187,6 +187,12 @@ void Interpreter::eval_frame() {
             PUSH(w->add(v));
             break;
 
+        case ByteCode::BINARY_MULTIPLY:
+            v = POP();
+            w = POP();
+            PUSH(v->mul(w));
+            break;
+
         case ByteCode::RETURN_VALUE:
             _ret_value = POP();
             if (_frame->is_first_frame()) {

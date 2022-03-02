@@ -38,6 +38,40 @@ ListKlass::ListKlass() {
     set_name(new HiString("list"));
 }
 
+HiObject* ListKlass::add(HiObject* x, HiObject* y) {
+    HiList* lx = (HiList*)x;
+    HiList* ly = (HiList*)y;
+
+    assert(lx && lx->klass() == this);
+    assert(ly && ly->klass() == this);
+
+    HiList* z = new HiList();
+    for (int i = 0; i < lx->size(); ++i) {
+        z->append(lx->get(i));
+    }
+    for (int i = 0; i < ly->size(); ++i) {
+        z->append(ly->get(i));
+    }
+
+    return z;
+}
+
+HiObject* ListKlass::mul(HiObject* x, HiObject* y) {
+    HiList* lx = (HiList*)x;
+    HiInteger* iy = (HiInteger*)y;
+    
+    assert(lx && lx->klass() == this);
+    assert(iy && iy->klass() == IntegerKlass::get_instance());
+
+    HiList* z = new HiList();
+    for (int i = 0; i < iy->value(); ++i) {
+        for (int j = 0; j < lx->size(); ++j) {
+            z->append(lx->get(j));
+        }
+    }
+    return z;
+}
+
 void ListKlass::print(HiObject* obj) {
     HiList* lst_obj = (HiList*)obj;
     assert(lst_obj && lst_obj->klass() == this);
