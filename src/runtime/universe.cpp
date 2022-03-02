@@ -14,8 +14,9 @@ void Universe::genesis() {
     HiNone = new HiObject();
 
     Map<HiObject*, HiObject*>* klass_dict = new Map<HiObject*, HiObject*>();
-    StringKlass::get_instance()->set_klass_dict(klass_dict);
     klass_dict->put(new HiString("upper"), new FunctionObject(string_upper));
+    StringKlass::get_instance()->set_klass_dict(klass_dict);
+    StringKlass::get_instance()->set_name(new HiString("str"));
 }
 
 void Universe::destory() {

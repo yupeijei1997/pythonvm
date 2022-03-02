@@ -42,10 +42,18 @@ HiObject* IntegerKlass::greater(HiObject* x, HiObject* y) {
 
 HiObject* IntegerKlass::less(HiObject* x, HiObject* y) {
     HiInteger* ix = (HiInteger*)x;
-    HiInteger* iy = (HiInteger*)y;
-
     assert(ix && (ix->klass() == this));
-    assert(iy && (iy->klass() == this));
+
+    if (x->klass() != y->klass()) {
+        if (Klass::compare_klass(x->klass(), y->klass()) < 0) {
+            return Universe::HiTrue;
+        }
+        else {
+            return Universe::HiFalse;
+        }
+    }
+
+    HiInteger* iy = (HiInteger*)y;
 
     if (ix->value() < iy->value()) {
         return Universe::HiTrue;

@@ -15,6 +15,7 @@ public:
 
     virtual void print(HiObject* obj);
     
+    virtual HiObject* less(HiObject* x, HiObject* y);
     virtual HiObject* subscr(HiObject* x, HiObject* y);
     virtual HiObject* contains(HiObject* x, HiObject* y);
     virtual HiObject* not_contains(HiObject* x, HiObject* y);
@@ -49,5 +50,7 @@ HiObject* list_insert(ArrayList<HiObject*>* args);
 HiObject* list_index(ArrayList<HiObject*>* args);
 HiObject* list_pop(ArrayList<HiObject*>* args);
 HiObject* list_remove(ArrayList<HiObject*>* args);
+HiObject* list_reverse(ArrayList<HiObject*>* args);
+HiObject* list_sort(ArrayList<HiObject*>* args);
 
 #endif

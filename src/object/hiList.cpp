@@ -32,7 +32,10 @@ ListKlass::ListKlass() {
     klass_dict->put(new HiString("index"), new FunctionObject(list_index));
     klass_dict->put(new HiString("pop"), new FunctionObject(list_pop));
     klass_dict->put(new HiString("remove"), new FunctionObject(list_remove));
+    klass_dict->put(new HiString("reverse"), new FunctionObject(list_reverse));
+    klass_dict->put(new HiString("sort"), new FunctionObject(list_sort));
     set_klass_dict(klass_dict);
+    set_name(new HiString("list"));
 }
 
 void ListKlass::print(HiObject* obj) {
@@ -52,6 +55,38 @@ void ListKlass::print(HiObject* obj) {
     }
 
     printf("]");
+}
+
+HiObject* ListKlass::less(HiObject* x, HiObject* y) {
+    HiList* lx = (HiList*)x;
+    assert(lx && lx->klass() == this);
+
+    if (x->klass() != y->klass()) {
+        if (Klass::compare_klass(x->klass(), y->klass()) < 0) {
+            return Universe::HiTrue;
+        }
+        else {
+            return Universe::HiFalse;
+        }
+    }
+
+    HiList* ly = (HiList*)y;
+
+    int len = lx->size() < ly->size() ? lx->size() : ly->size();
+    for (int i = 0; i < len; ++i) {
+        if (lx->get(i)->less(ly->get(i)) == Universe::HiTrue) {
+            return Universe::HiTrue;
+        }
+        else {
+            return Universe::HiFalse;
+        }
+    }
+
+    if (lx->size() < ly->size()) {
+        return Universe::HiTrue;
+    }
+
+    return Universe::HiFalse;
 }
 
 HiObject* ListKlass::subscr(HiObject* x, HiObject* y) {
@@ -154,4 +189,38 @@ HiObject* list_remove(ArrayList<HiObject*>* args) {
         }
     }
     return Universe::HiNone; 
+}
+
+HiObject* list_reverse(ArrayList<HiObject*>* args) {
+    HiList* list = (HiList*)(args->get(0));
+    assert(list && list->klass() == ListKlass::get_instance());
+
+    int i = 0, j = list->size() - 1;
+    while (i < j) {
+        HiObject* tmp = list->get(i);
+        list->set(i, list->get(j));
+        list->set(j, tmp);
+
+        ++i;
+        --j;
+    }
+    return Universe::HiNone;
+}
+
+HiObject* list_sort(ArrayList<HiObject*>* args) {
+    HiList* list = (HiList*)(args->get(0));
+    assert(list && list->klass() == ListKlass::get_instance());
+
+    // bubble sort
+    int size = list->size();
+    for (int i = 0; i < size; ++i) {
+        for (int j = size - 1; j > i; --j) {
+            if (list->get(j)->less(list->get(j - 1)) == Universe::HiTrue) {
+                HiObject* tmp = list->get(j - 1);
+                list->set(j - 1, list->get(j));
+                list->set(j, tmp);
+            }
+        }
+    }
+    return Universe::HiNone;
 }
