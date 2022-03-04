@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include "object/hiInteger.hpp"
+#include "object/hiDict.hpp"
 #include "runtime/universe.hpp"
-
-IntegerKlass* IntegerKlass::instance = nullptr;
 
 HiInteger::HiInteger(int x) {
     _value = x;
     set_klass(IntegerKlass::get_instance());
 }
+
+IntegerKlass* IntegerKlass::instance = nullptr;
 
 IntegerKlass* IntegerKlass::get_instance() {
     if (instance == nullptr) {
@@ -15,6 +16,12 @@ IntegerKlass* IntegerKlass::get_instance() {
     }
 
     return instance;
+}
+
+void IntegerKlass::initialize() {
+    HiDict* klass_dict = new HiDict();
+    set_klass_dict(klass_dict);
+    set_name(new HiString("int"));
 }
 
 void IntegerKlass::print(HiObject* obj) {
@@ -65,10 +72,13 @@ HiObject* IntegerKlass::less(HiObject* x, HiObject* y) {
 
 HiObject* IntegerKlass::equal(HiObject* x, HiObject* y) {
     HiInteger* ix = (HiInteger*)x;
-    HiInteger* iy = (HiInteger*)y;
-
     assert(ix && (ix->klass() == this));
-    assert(iy && (iy->klass() == this));
+
+    if (x->klass() != y->klass()) {
+        return Universe::HiFalse;
+    }
+
+    HiInteger* iy = (HiInteger*)y;
 
     if (ix->value() == iy->value()) {
         return Universe::HiTrue;
@@ -80,11 +90,14 @@ HiObject* IntegerKlass::equal(HiObject* x, HiObject* y) {
 
 HiObject* IntegerKlass::not_equal(HiObject* x, HiObject* y) {
     HiInteger* ix = (HiInteger*)x;
-    HiInteger* iy = (HiInteger*)y;
-
     assert(ix && (ix->klass() == this));
-    assert(iy && (iy->klass() == this));
 
+    if (x->klass() != y->klass()) {
+        return Universe::HiFalse;
+    }
+
+    HiInteger* iy = (HiInteger*)y;
+    
     if (ix->value() != iy->value()) {
         return Universe::HiTrue;
     }

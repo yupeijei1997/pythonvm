@@ -31,6 +31,7 @@ public:
     V remove(K k);
     int index(K k);
     MapEntry<K, V>* entries() { return _entries; }
+    bool has_key(K k);
 };
 
 #endif

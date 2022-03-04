@@ -9,6 +9,7 @@
 #include "code/bytecode.hpp"
 #include "util/map.hpp"
 #include "object/hiList.hpp"
+#include "object/hiDict.hpp"
 
 #define PUSH(x) _frame->stack()->add(x)
 #define POP() _frame->stack()->pop()
@@ -158,6 +159,13 @@ void Interpreter::eval_frame() {
             v = POP();
             w = POP();
             v->store_subscr(u, w);
+            break;
+
+        case ByteCode::STORE_MAP:
+            u = POP();
+            v = POP();
+            w = TOP();
+            ((HiDict*)w)->put(u, v);
             break;
 
         case ByteCode::DELETE_SUBSCR:
@@ -333,6 +341,11 @@ void Interpreter::eval_frame() {
             while (op_arg--) {
                 ((HiList*)v)->set(op_arg, POP());
             }
+            PUSH(v);
+            break;
+
+        case ByteCode::BUILD_MAP:
+            v = new HiDict();
             PUSH(v);
             break;
 

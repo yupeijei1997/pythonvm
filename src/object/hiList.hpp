@@ -7,11 +7,12 @@
 
 class ListKlass : public Klass {
 private:
-    ListKlass();
+    ListKlass() {}
     static ListKlass* instance;
 
 public:
     static ListKlass* get_instance();
+    void initialize();
 
     virtual HiObject* add(HiObject* x, HiObject* y);
     virtual HiObject* mul(HiObject* x, HiObject* y);

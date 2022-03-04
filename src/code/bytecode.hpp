@@ -5,6 +5,7 @@ public:
     static const unsigned char BINARY_ADD = 23;
     static const unsigned char BINARY_SUBSCR = 25;
 
+    static const unsigned char STORE_MAP = 54;
     static const unsigned char STORE_SUBSCR = 60;
     static const unsigned char DELETE_SUBSCR = 61;
     static const unsigned char GET_ITER = 68;
@@ -21,6 +22,7 @@ public:
     static const unsigned char LOAD_CONST = 100;
     static const unsigned char LOAD_NAME = 101;
     static const unsigned char BUILD_LIST = 103;
+    static const unsigned char BUILD_MAP = 105;
     static const unsigned char LOAD_ATTR = 106;
     static const unsigned char COMPARE_OP = 107;
     static const unsigned char JUMP_FORWARD = 110;

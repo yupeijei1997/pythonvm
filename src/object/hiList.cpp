@@ -2,6 +2,7 @@
 #include "object/hiList.hpp"
 #include "object/hiInteger.hpp"
 #include "object/hiString.hpp"
+#include "object/hiDict.hpp"
 #include "runtime/functionObject.hpp"
 #include "runtime/universe.hpp"
 
@@ -25,8 +26,8 @@ ListKlass* ListKlass::get_instance() {
     return instance;
 }
 
-ListKlass::ListKlass() {
-    Map<HiObject*, HiObject*>* klass_dict = new Map<HiObject*, HiObject*>();
+void ListKlass::initialize() {
+    HiDict* klass_dict = new HiDict();
     klass_dict->put(new HiString("append"), new FunctionObject(list_append));
     klass_dict->put(new HiString("insert"), new FunctionObject(list_insert));
     klass_dict->put(new HiString("index"), new FunctionObject(list_index));
@@ -279,7 +280,7 @@ ListIteratorKlass* ListIteratorKlass::get_instance() {
 }
 
 ListIteratorKlass::ListIteratorKlass() {
-    Map<HiObject*, HiObject*>* klass_dict = new Map<HiObject*, HiObject*>();
+    HiDict* klass_dict = new HiDict();
     klass_dict->put(new HiString("next"), new FunctionObject(listiterator_next));
     set_klass_dict(klass_dict);
 }

@@ -1,7 +1,28 @@
 #include <stdio.h>
 #include <string.h>
 #include "object/hiString.hpp"
+#include "object/hiDict.hpp"
+#include "runtime/functionObject.hpp"
 #include "runtime/universe.hpp"
+
+HiString::HiString(const char* x) {
+    _length = strlen(x);
+    _value = new char[_length];
+    strcpy(_value, x);
+
+    set_klass(StringKlass::get_instance());
+}
+
+HiString::HiString(const char* x, int length) {
+    _length = length;
+    _value = new char[length];
+    // Do not use strcpy here, because '\0' is allowed.
+    for (int i = 0; i < length; ++i) {
+        _value[i] = x[i];
+    }
+
+    set_klass(StringKlass::get_instance());
+}
 
 StringKlass* StringKlass::instance = nullptr;
 
@@ -14,12 +35,23 @@ StringKlass* StringKlass::get_instance() {
     }
 }
 
+void StringKlass::initialize() {
+    HiDict* klass_dict = new HiDict();
+    klass_dict->put(new HiString("upper"), new FunctionObject(string_upper));
+    set_klass_dict(klass_dict);
+
+    set_name(new HiString("str"));
+}
+
 HiObject* StringKlass::equal(HiObject* x, HiObject* y) {
     HiString* sx = (HiString*)x;
     HiString* sy = (HiString*)y;
 
     assert(sx && (sx->klass() == this));
-    assert(sy && (sy->klass() == this));
+   
+    if (sx->klass() != sy->klass()) {
+        return Universe::HiFalse;
+    }
 
     if (sx->length() != sy->length()) {
         return Universe::HiFalse;
@@ -140,25 +172,6 @@ HiObject* StringKlass::not_contains(HiObject* x, HiObject* y) {
     else {
         return Universe::HiTrue;
     }
-}
-
-HiString::HiString(const char* x) {
-    _length = strlen(x);
-    _value = new char[_length];
-    strcpy(_value, x);
-
-    set_klass(StringKlass::get_instance());
-}
-
-HiString::HiString(const char* x, int length) {
-    _length = length;
-    _value = new char[length];
-    // Do not use strcpy here, because '\0' is allowed.
-    for (int i = 0; i < length; ++i) {
-        _value[i] = x[i];
-    }
-
-    set_klass(StringKlass::get_instance());
 }
 
 HiObject* string_upper(ArrayList<HiObject*>* args) {

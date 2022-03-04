@@ -2,6 +2,7 @@
 #include <assert.h>
 #include "runtime/functionObject.hpp"
 #include "runtime/universe.hpp"
+#include "object/hiDict.hpp"
 
 FunctionKlass* FunctionKlass::instance = nullptr;
 
@@ -96,7 +97,7 @@ MethodKlass* MethodKlass::get_instance() {
 }
 
 MethodKlass::MethodKlass() {
-    set_klass_dict(new Map<HiObject*, HiObject*>());
+    set_klass_dict(new HiDict());
 }
 
 bool MethodObject::is_function(HiObject* x) {

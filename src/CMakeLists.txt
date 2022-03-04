@@ -10,6 +10,7 @@ ADD_EXECUTABLE(main main.cpp
     object/hiInteger.cpp
     object/hiString.cpp
     object/hiList.cpp
+    object/hiDict.cpp
     object/klass.cpp
     util/arrayList.cpp
     code/codeObject.cpp

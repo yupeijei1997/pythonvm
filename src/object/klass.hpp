@@ -2,16 +2,16 @@
 #define KLASS_HPP
 
 #include "util/arrayList.hpp"
-#include "util/map.hpp"
 
 class HiString;
 class HiObject;
+class HiDict;
 
 class Klass {
 private:
     Klass* _super;
     HiString* _name;
-    Map<HiObject*, HiObject*>* _klass_dict;
+    HiDict* _klass_dict;
 
 public:
     Klass() {}
@@ -22,8 +22,8 @@ public:
     void set_name(HiString* x) { _name = x; }
     HiString* name() { return _name; }
 
-    void set_klass_dict(Map<HiObject*, HiObject*>* klass_dict) { _klass_dict = klass_dict; }
-    Map<HiObject*, HiObject*>* klass_dict() { return _klass_dict; }
+    void set_klass_dict(HiDict* klass_dict) { _klass_dict = klass_dict; }
+    HiDict* klass_dict() { return _klass_dict; }
 
     static int compare_klass(Klass* x, Klass* y);
     virtual void print(HiObject* obj) {}
