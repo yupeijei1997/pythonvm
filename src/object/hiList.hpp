@@ -25,6 +25,7 @@ public:
     virtual HiObject* not_contains(HiObject* x, HiObject* y);
     virtual void store_subscr(HiObject* x, HiObject* y, HiObject* z);
     virtual void del_subscr(HiObject* x, HiObject* y);
+    virtual HiObject* unpack(HiObject* x, HiObject* y);
     virtual HiObject* iter(HiObject* x);
 };
 
@@ -65,6 +66,8 @@ private:
 
 public:
     static ListIteratorKlass* get_instance();
+
+    virtual HiObject* next(HiObject* x);
 };
 
 class ListIterator : public HiObject {

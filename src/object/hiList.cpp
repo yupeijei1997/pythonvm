@@ -79,14 +79,14 @@ void ListKlass::print(HiObject* obj) {
 
     printf("[");
 
-    int size = lst_obj->inner_list()->size();
+    int size = lst_obj->size();
     if (size >= 1) {
-        lst_obj->inner_list()->get(0)->print();
+        lst_obj->get(0)->print();
     }
 
     for (int i = 1; i < size; ++i) {
         printf(",");
-        lst_obj->inner_list()->get(i)->print();
+        lst_obj->get(i)->print();
     }
 
     printf("]");
@@ -131,7 +131,7 @@ HiObject* ListKlass::subscr(HiObject* x, HiObject* y) {
     HiList* lx = (HiList*)x;
     HiInteger* iy = (HiInteger*)y;
 
-    return lx->inner_list()->get(iy->value());
+    return lx->get(iy->value());
 }
 
 HiObject* ListKlass::contains(HiObject* x, HiObject* y) {
@@ -139,9 +139,9 @@ HiObject* ListKlass::contains(HiObject* x, HiObject* y) {
     
     HiList* lx = (HiList*)x;
 
-    int size = lx->inner_list()->size();
+    int size = lx->size();
     for (int i = 0; i < size; ++i) {
-        if (lx->inner_list()->get(i)->equal(y) == Universe::HiTrue) {
+        if (lx->get(i)->equal(y) == Universe::HiTrue) {
             return Universe::HiTrue;
         }
     }
@@ -165,7 +165,7 @@ void ListKlass::store_subscr(HiObject* x, HiObject* y, HiObject* z) {
     HiList* lx = (HiList*)x;
     HiInteger* iy = (HiInteger*)y;
 
-    lx->inner_list()->set(iy->value(), z);
+    lx->set(iy->value(), z);
 }
 
 void ListKlass::del_subscr(HiObject* x, HiObject* y) {
@@ -178,9 +178,28 @@ void ListKlass::del_subscr(HiObject* x, HiObject* y) {
     lx->delete_index(iy->value());
 }
 
+HiObject* ListKlass::unpack(HiObject* x, HiObject* y) {
+    return subscr(x, y);
+}
+
 HiObject* ListKlass::iter(HiObject* x) {
     assert(x && x->klass() == this);
     return new ListIterator((HiList*)x);
+}
+
+HiObject* ListIteratorKlass::next(HiObject* x) {
+    ListIterator* iter = (ListIterator*)x;
+
+    HiList* alist = iter->owner();
+    int iter_cnt = iter->iter_cnt();
+    if (iter_cnt < alist->size()) {
+        HiObject* obj = alist->get(iter_cnt);
+        iter->inc_cnt();
+        return obj;
+    }
+    else {
+        return nullptr;
+    }
 }
 
 HiObject* list_append(ArrayList<HiObject*>* args) {

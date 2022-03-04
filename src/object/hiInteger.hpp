@@ -4,10 +4,11 @@
 #include "object/hiObject.hpp"
 #include "object/klass.hpp"
 #include "object/hiString.hpp"
+#include "object/hiDict.hpp"
 
 class IntegerKlass : public Klass {
 private:
-    IntegerKlass() { set_name(new HiString("int")); }
+    IntegerKlass() {}
     static IntegerKlass* instance;
 
 public:

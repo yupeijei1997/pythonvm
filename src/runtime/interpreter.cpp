@@ -356,12 +356,22 @@ void Interpreter::eval_frame() {
 
         case ByteCode::FOR_ITER:
             v = TOP();
-            w = v->getattr(StringTable::get_instance()->next_str);
-            build_frame(w, nullptr);
+            w = v->next();
             
-           if (TOP() == nullptr) {
+           if (w == nullptr) {
                 _frame->set_pc(_frame->_pc + op_arg);
                 POP();
+            }
+            else {
+                PUSH(w);
+            }
+            break;
+
+        case ByteCode::UNPACK_SEQUENCE:
+            v = POP();
+
+            while (op_arg--) {
+                PUSH(v->unpack(new HiInteger(op_arg)));
             }
             break;
 

@@ -33,8 +33,10 @@ public:
     HiObject* not_contains(HiObject* x);
     void store_subscr(HiObject* x, HiObject* y);
     void del_subscr(HiObject* x);
+    HiObject* unpack(HiObject* x);
 
     HiObject* iter();
+    HiObject* next();
 
     HiObject* getattr(HiObject* x);
 };

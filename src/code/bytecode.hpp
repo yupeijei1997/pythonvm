@@ -17,6 +17,7 @@ public:
     static const unsigned char HAVE_ARGUMENT = 90;
 
     static const unsigned char STORE_NAME = 90;
+    static const unsigned char UNPACK_SEQUENCE = 92;
     static const unsigned char FOR_ITER = 93;
     static const unsigned char STORE_GLOBAL = 97;
     static const unsigned char LOAD_CONST = 100;

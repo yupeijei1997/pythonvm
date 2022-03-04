@@ -75,6 +75,10 @@ void HiObject::del_subscr(HiObject* x) {
     klass()->del_subscr(this, x);
 }
 
+HiObject* HiObject::unpack(HiObject* x) {
+    return klass()->unpack(this, x);
+}
+
 HiObject* HiObject::getattr(HiObject* x) {
     HiObject* result = klass()->klass_dict()->get(x);
     if (result == Universe::HiNone) {
@@ -89,4 +93,8 @@ HiObject* HiObject::getattr(HiObject* x) {
 
 HiObject* HiObject::iter() {
     return klass()->iter(this);
+}
+
+HiObject* HiObject::next() {
+    return klass()->next(this);
 }

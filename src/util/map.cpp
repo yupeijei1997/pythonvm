@@ -41,6 +41,16 @@ V Map<K, V>::get(K k) {
 }
 
 template<typename K, typename V>
+K Map<K, V>::get_key(int index) {
+    return _entries[index]._k;
+}
+
+template<typename K, typename V>
+V Map<K, V>::get_value(int index) {
+    return _entries[index]._v;
+}
+
+template<typename K, typename V>
 int Map<K, V>::index(K k) {
     for (int i = 0; i < _size; ++i) {
         if (_entries[i]._k->equal(k) == Universe::HiTrue) {
