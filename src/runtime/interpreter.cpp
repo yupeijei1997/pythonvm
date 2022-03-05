@@ -29,7 +29,7 @@ Interpreter::Interpreter() {
     _builtins->put(new HiString("len"), new FunctionObject(len));
 }
 
-void Interpreter::build_frame(HiObject* callable, ArrayList<HiObject*>* args) {
+void Interpreter::build_frame(HiObject* callable, ArrayList<HiObject*>* args, int op_arg) {
     if (callable->klass() == NativeFunctionKlass::get_instance()) {
         PUSH(((FunctionObject*)callable)->call(args));
     }
@@ -39,10 +39,10 @@ void Interpreter::build_frame(HiObject* callable, ArrayList<HiObject*>* args) {
             args = new ArrayList<HiObject*>(1);
         }
         args->insert(0, method->owner());
-        build_frame(method->func(), args);
+        build_frame(method->func(), args, op_arg + 1);
     }
     else if (callable->klass() == FunctionKlass::get_instance()) {
-        FrameObject* frame = new FrameObject((FunctionObject*)callable, args);
+        FrameObject* frame = new FrameObject((FunctionObject*)callable, args, op_arg);
         frame->set_sender(_frame);
         _frame = frame;
     }
@@ -324,12 +324,15 @@ void Interpreter::eval_frame() {
 
         case ByteCode::CALL_FUNCTION:
             if (op_arg > 0) {
-                args = new ArrayList<HiObject*>(op_arg);
-                while (op_arg--) {
-                    args->set(op_arg, POP());
+                int na = op_arg & 0xFF;
+                int nk = op_arg >> 8;
+                int arg_cnt = na + nk * 2;
+                args = new ArrayList<HiObject*>(arg_cnt);
+                while (arg_cnt--) {
+                    args->set(arg_cnt, POP());
                 }
             }
-            build_frame(POP(), args);
+            build_frame(POP(), args, op_arg);
             if (args != nullptr) {
                 delete args;
                 args = nullptr;

@@ -2,6 +2,7 @@
 #define FRAME_OBJECT_HPP
 
 #include "object/hiObject.hpp"
+#include "object/hiDict.hpp"
 #include "util/arrayList.hpp"
 #include "util/map.hpp"
 #include "code/codeObject.hpp"
@@ -34,8 +35,8 @@ public:
     ArrayList<HiObject*>* _consts;
     ArrayList<HiObject*>* _names;
 
-    Map<HiObject*, HiObject*>* _locals;
-    Map<HiObject*, HiObject*>* _globals;
+    HiDict* _locals;
+    HiDict* _globals;
     ArrayList<HiObject*>* _fast_locals;
 
     CodeObject* _codes;
@@ -46,7 +47,7 @@ public:
 
 public:
     FrameObject(CodeObject* codes);
-    FrameObject(FunctionObject* func, ArrayList<HiObject*>* args);
+    FrameObject(FunctionObject* func, ArrayList<HiObject*>* args, int op_arg);
     ~FrameObject() {}
 
     void set_pc(int x) { _pc = x; }
@@ -59,8 +60,8 @@ public:
     ArrayList<Block*>* loop_stack() { return _loop_stack; }
     ArrayList<HiObject*>* consts() { return _consts; }
     ArrayList<HiObject*>* names() { return _names; }
-    Map<HiObject*, HiObject*>* locals() { return _locals; }
-    Map<HiObject*, HiObject*>* globals() { return _globals; }
+    HiDict* locals() { return _locals; }
+    HiDict* globals() { return _globals; }
     ArrayList<HiObject*>* fast_locals() { return _fast_locals; }
 
     bool is_first_frame() { return _sender == nullptr; }

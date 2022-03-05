@@ -38,7 +38,7 @@ friend class FrameObject;
 private:
     CodeObject* _func_code;
     HiString* _func_name;
-    Map<HiObject*, HiObject*>* _globals;
+    HiDict* _globals;
     ArrayList<HiObject*>* _defaults;
 
     NativeFuncPointer _native_func;
@@ -46,6 +46,12 @@ private:
     unsigned int _flags;
 
 public:
+    enum CO_FLAGS {
+        CO_VARARGS = 0x4,
+        CO_VARKEYWORDS = 0x8,
+        CO_GENERATOR = 0x20
+    };
+
     FunctionObject(HiObject* code_object);
     FunctionObject(NativeFuncPointer nfp);
     FunctionObject(Klass* klass) {
@@ -61,8 +67,8 @@ public:
     HiString* func_name() { return _func_name; }
     int flags() { return _flags; }
 
-    Map<HiObject*, HiObject*>* globals() { return _globals; }
-    void set_globals(Map<HiObject*, HiObject*>* x) { _globals = x; }
+    HiDict* globals() { return _globals; }
+    void set_globals(HiDict* x) { _globals = x; }
     
     ArrayList<HiObject*>* defaults() { return _defaults; }
     void set_defaults(ArrayList<HiObject*>* defaults);
