@@ -5,6 +5,7 @@
 #include "runtime/universe.hpp"
 #include "runtime/functionObject.hpp"
 #include "runtime/stringTable.hpp"
+#include "runtime/cellObject.hpp"
 #include "code/codeObject.hpp"
 #include "code/bytecode.hpp"
 #include "util/map.hpp"
@@ -140,6 +141,37 @@ void Interpreter::eval_frame() {
             PUSH(v->getattr(w));
             break;
 
+        case ByteCode::LOAD_CLOSURE:
+            v = _frame->closure()->get(op_arg);  // 从局部变量(cellvars)和 freevars 中获取
+            if (v == nullptr) {
+                v = _frame->get_cell_from_parameter(op_arg);  // 从入参(cellvars)中获取
+                _frame->closure()->set(op_arg, v);
+            }
+
+            if (v->klass() == CellKlass::get_instance()) {
+                // v 来自 freevars 中
+                PUSH(v);
+            }
+            else {
+                PUSH(new CellObject(_frame->closure(), op_arg));
+            }
+            break;
+
+        case ByteCode::LOAD_DEREF:
+            v = _frame->closure()->get(op_arg);
+            if (v == nullptr) {
+                w = _frame->codes()->_cell_vars->get(op_arg);
+                int index = _frame->codes()->_var_names->index(w);
+                v = _frame->fast_locals()->get(index);  // v 来自入参(cellvars)中
+            }
+            else {
+                if (v->klass() == CellKlass::get_instance()) {
+                    v = ((CellObject*)v)->value();  // v 来自 freevars 中
+                }
+            }
+            PUSH(v);
+            break;
+
         case ByteCode::STORE_NAME:
             v = _frame->names()->get(op_arg);
             _frame->locals()->put(v, POP());
@@ -166,6 +198,10 @@ void Interpreter::eval_frame() {
             v = POP();
             w = TOP();
             ((HiDict*)w)->put(u, v);
+            break;
+
+        case ByteCode::STORE_DEREF:
+            _frame->closure()->set(op_arg, POP());
             break;
 
         case ByteCode::DELETE_SUBSCR:
@@ -322,12 +358,33 @@ void Interpreter::eval_frame() {
             PUSH(fo);
             break;
 
+        case ByteCode::MAKE_CLOSURE:
+            v = POP();
+            fo = new FunctionObject(v);
+            fo->set_closure((HiList*)(POP()));
+            fo->set_globals(_frame->globals());
+            if (op_arg > 0) {
+                args = new ArrayList<HiObject*>(op_arg);
+                while (op_arg--) {
+                    args->set(op_arg, POP());
+                }
+            }
+            fo->set_defaults(args);
+
+            if (args != nullptr) {
+                delete args;
+                args = nullptr;
+            }
+
+            PUSH(fo);
+            break;
+
         case ByteCode::CALL_FUNCTION:
             if (op_arg > 0) {
                 int na = op_arg & 0xFF;
                 int nk = op_arg >> 8;
                 int arg_cnt = na + nk * 2;
-                args = new ArrayList<HiObject*>(arg_cnt);
+                args = new ArrayList<HiObject*>(arg_cnt);  // 实参
                 while (arg_cnt--) {
                     args->set(arg_cnt, POP());
                 }
@@ -337,6 +394,14 @@ void Interpreter::eval_frame() {
                 delete args;
                 args = nullptr;
             }
+            break;
+
+        case ByteCode::BUILD_TUPLE:
+            v = new HiList();
+            while (op_arg--) {
+                ((HiList*)v)->set(op_arg, POP());
+            }
+            PUSH(v);
             break;
 
         case ByteCode::BUILD_LIST:

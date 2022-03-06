@@ -20,6 +20,7 @@ ADD_EXECUTABLE(main main.cpp
     runtime/frameObject.cpp
     runtime/functionObject.cpp
     runtime/stringTable.cpp
+    runtime/cellObject.cpp
     util/map.cpp)
 
 INCLUDE_DIRECTORIES(./)

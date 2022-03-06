@@ -38,6 +38,7 @@ public:
     HiDict* _locals;
     HiDict* _globals;
     ArrayList<HiObject*>* _fast_locals;
+    HiList* _closure;
 
     CodeObject* _codes;
 
@@ -53,6 +54,8 @@ public:
     void set_pc(int x) { _pc = x; }
     int get_pc() { return _pc; }
 
+    CodeObject* codes() { return _codes; }
+
     void set_sender(FrameObject* x) { _sender = x; }
     FrameObject* sender() { return _sender; }
 
@@ -63,11 +66,13 @@ public:
     HiDict* locals() { return _locals; }
     HiDict* globals() { return _globals; }
     ArrayList<HiObject*>* fast_locals() { return _fast_locals; }
+    HiList* closure() { return _closure; }
 
     bool is_first_frame() { return _sender == nullptr; }
     bool has_more_codes();
     unsigned char get_op_code();
     int get_op_arg();
+    HiObject* get_cell_from_parameter(int i);
 };
 
 #endif

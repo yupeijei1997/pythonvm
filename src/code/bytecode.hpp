@@ -22,6 +22,7 @@ public:
     static const unsigned char STORE_GLOBAL = 97;
     static const unsigned char LOAD_CONST = 100;
     static const unsigned char LOAD_NAME = 101;
+    static const unsigned char BUILD_TUPLE = 102;
     static const unsigned char BUILD_LIST = 103;
     static const unsigned char BUILD_MAP = 105;
     static const unsigned char LOAD_ATTR = 106;
@@ -36,6 +37,11 @@ public:
 
     static const unsigned char CALL_FUNCTION = 131;
     static const unsigned char MAKE_FUNCTION = 132;
+    
+    static const unsigned char MAKE_CLOSURE = 134;
+    static const unsigned char LOAD_CLOSURE = 135;
+    static const unsigned char LOAD_DEREF = 136;
+    static const unsigned char STORE_DEREF = 137;
 
     enum COMPARE {
         LESS = 0,

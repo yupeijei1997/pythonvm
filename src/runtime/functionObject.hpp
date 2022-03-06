@@ -1,9 +1,10 @@
 #ifndef FUNCTION_OBJECT_HPP
 #define FUNCTION_OBJECT_HPP
 
+#include "code/codeObject.hpp"
 #include "object/hiObject.hpp"
 #include "object/klass.hpp"
-#include "code/codeObject.hpp"
+#include "object/hiList.hpp"
 #include "object/hiString.hpp"
 #include "util/map.hpp"
 
@@ -40,6 +41,7 @@ private:
     HiString* _func_name;
     HiDict* _globals;
     ArrayList<HiObject*>* _defaults;
+    HiList* _closure;
 
     NativeFuncPointer _native_func;
 
@@ -72,6 +74,9 @@ public:
     
     ArrayList<HiObject*>* defaults() { return _defaults; }
     void set_defaults(ArrayList<HiObject*>* defaults);
+
+    HiList* closure() { return _closure; }
+    void set_closure(HiList* x) { _closure = x; }
 
     HiObject* call(ArrayList<HiObject*>* args);
 };

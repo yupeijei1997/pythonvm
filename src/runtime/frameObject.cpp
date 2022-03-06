@@ -81,6 +81,25 @@ FrameObject::FrameObject(FunctionObject* func, ArrayList<HiObject*>* args, int o
         _fast_locals->set(kw_pos, adict);
     }
 
+    _closure = nullptr;
+    ArrayList<HiObject*>* cells = _codes->_cell_vars;
+    if (cells && cells->size() > 0) {
+        _closure = new HiList();
+
+        for (int i = 0; i < cells->size(); ++i) {
+            _closure->append(nullptr);
+        }
+    }
+
+    if (func->closure() && func->closure()->size() > 0) {
+        if (_closure == nullptr) {
+            _closure = func->closure();
+        }
+        else {
+            _closure = (HiList*)(_closure->add(func->closure()));
+        }
+    }
+
     _stack = new ArrayList<HiObject*>();
     _loop_stack = new ArrayList<Block*>();
 
@@ -100,4 +119,10 @@ unsigned char FrameObject::get_op_code() {
 
 bool FrameObject::has_more_codes() {
     return _pc < _codes->_bytecodes->length();
+}
+
+HiObject* FrameObject::get_cell_from_parameter(int i) {
+    HiObject* cell_name = _codes->_cell_vars->get(i);
+    i = _codes->_var_names->index(cell_name);
+    return _fast_locals->get(i);
 }
