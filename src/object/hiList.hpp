@@ -19,6 +19,8 @@ public:
 
     virtual void print(HiObject* obj);
     
+    virtual HiObject* allocate_instance(ArrayList<HiObject*>* args);
+
     virtual HiObject* less(HiObject* x, HiObject* y);
     virtual HiObject* subscr(HiObject* x, HiObject* y);
     virtual HiObject* contains(HiObject* x, HiObject* y);

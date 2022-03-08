@@ -14,6 +14,9 @@ public:
     void initialize();
 
     virtual void print(HiObject* obj);
+
+    virtual HiObject* allocate_instance(ArrayList<HiObject*>* args);
+
     virtual HiObject* subscr(HiObject* x, HiObject* y);
     virtual void store_subscr(HiObject* x, HiObject* y, HiObject* z);
     virtual void del_subscr(HiObject* x, HiObject* y);

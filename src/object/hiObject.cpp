@@ -1,9 +1,34 @@
+#include <stdio.h>
 #include "object/hiObject.hpp"
 #include "object/hiDict.hpp"
 #include "runtime/universe.hpp"
 #include "runtime/functionObject.hpp"
 
+ObjectKlass* ObjectKlass::instance = nullptr;
+
+ObjectKlass::ObjectKlass() {
+    set_super(nullptr);
+}
+
+ObjectKlass* ObjectKlass::get_instance() {
+    if (instance == nullptr) {
+        instance = new ObjectKlass();
+    }
+
+    return instance;
+}
+
+void ObjectKlass::initialize() {
+    set_klass_dict(new HiDict());
+    (new HiTypeObject())->set_own_klass(this);
+    set_name(new HiString("object"));
+}
+
 void HiObject::print() {
+    if (klass() == NativeFunctionKlass::get_instance()) {
+        TypeKlass::get_instance()->type_object()->print();
+    }
+
     klass()->print(this);
 }
 
@@ -97,4 +122,42 @@ HiObject* HiObject::iter() {
 
 HiObject* HiObject::next() {
     return klass()->next(this);
+}
+
+/*
+ * TypeObject is a special object.
+ */
+TypeKlass* TypeKlass::instance = nullptr;
+
+TypeKlass* TypeKlass::get_instance() {
+    if (instance == nullptr) {
+        instance = new TypeKlass();
+    }
+
+    return instance;
+}
+
+void TypeKlass::initialize() {
+    set_klass_dict(new HiDict());
+    (new HiTypeObject())->set_own_klass(this);
+    set_super(ObjectKlass::get_instance());
+    set_name(new HiString("type"));
+}
+
+void TypeKlass::print(HiObject* obj) {
+    assert(obj && obj->klass() == this);
+    printf("<type ");
+    Klass* own_klass = ((HiTypeObject*)obj)->own_klass();
+    
+    own_klass->name()->print();
+    printf(">");
+}
+
+HiTypeObject::HiTypeObject() {
+    set_klass(TypeKlass::get_instance());
+}
+
+void HiTypeObject::set_own_klass(Klass* k) {
+    _own_klass = k;
+    k->set_type_object(this);
 }

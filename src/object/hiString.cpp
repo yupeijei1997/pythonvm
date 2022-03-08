@@ -40,6 +40,8 @@ void StringKlass::initialize() {
     klass_dict->put(new HiString("upper"), new FunctionObject(string_upper));
     set_klass_dict(klass_dict);
 
+    (new HiTypeObject())->set_own_klass(this);
+    set_super(ObjectKlass::get_instance());
     set_name(new HiString("str"));
 }
 
@@ -73,6 +75,15 @@ void StringKlass::print(HiObject* obj) {
 
     for (int i = 0; i < str_obj->length(); ++i) {
         printf("%c", str_obj->value()[i]);
+    }
+}
+
+HiObject* StringKlass::allocate_instance(ArrayList<HiObject*>* args) {
+    if (!args || args->length() == 0) {
+        return new HiString("");
+    }
+    else {
+        return args->get(0);
     }
 }
 

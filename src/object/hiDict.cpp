@@ -37,6 +37,10 @@ void DictKlass::initialize() {
     klass_dict->put(new HiString("itervalues"), new FunctionObject(dict_itervalues));
     klass_dict->put(new HiString("iteritems"), new FunctionObject(dict_iteritems));
     set_klass_dict(klass_dict);
+
+    (new HiTypeObject())->set_own_klass(this);
+    set_super(ObjectKlass::get_instance());
+    set_name(new HiString("dict"));
 }
 
 void DictKlass::print(HiObject* obj) {
@@ -59,6 +63,15 @@ void DictKlass::print(HiObject* obj) {
     }
 
     printf("}");
+}
+
+HiObject* DictKlass::allocate_instance(ArrayList<HiObject*>* args) {
+    if (!args || args->length() == 0) {
+        return new HiDict();
+    }
+    else {
+        return args->get(0);
+    }
 }
 
 HiObject* DictKlass::subscr(HiObject* x, HiObject* y) {

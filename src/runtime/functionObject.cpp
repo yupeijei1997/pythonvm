@@ -78,6 +78,42 @@ HiObject* len(ArrayList<HiObject*>* args) {
     return args->get(0)->len();
 }
 
+HiObject* isinstance(ArrayList<HiObject*>* args) {
+    HiObject* x = args->get(0);
+    HiObject* y = args->get(1);
+
+    if (x->klass() == NativeFunctionKlass::get_instance()) {
+        x = TypeKlass::get_instance()->type_object();
+    }
+
+    if (y->klass() == NativeFunctionKlass::get_instance()) {
+        y = TypeKlass::get_instance()->type_object();
+    }
+
+    assert(y && y->klass() == TypeKlass::get_instance());
+
+    Klass* k = x->klass();
+    while (k != nullptr) {
+        if (k == ((HiTypeObject*)y)->own_klass()) {
+            return Universe::HiTrue;
+        }
+
+        k = k->super();
+    }
+
+    return Universe::HiFalse;
+}
+
+HiObject* type_of(ArrayList<HiObject*>* args) {
+    HiObject* arg0 = args->get(0);
+
+    if (arg0->klass() == NativeFunctionKlass::get_instance()) {
+        arg0 = TypeKlass::get_instance()->type_object();
+    }
+
+    return arg0->klass()->type_object();
+}
+
 HiObject* FunctionObject::call(ArrayList<HiObject*>* args) {
     return _native_func(args);
 }

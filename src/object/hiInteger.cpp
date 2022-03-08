@@ -21,6 +21,9 @@ IntegerKlass* IntegerKlass::get_instance() {
 void IntegerKlass::initialize() {
     HiDict* klass_dict = new HiDict();
     set_klass_dict(klass_dict);
+
+    (new HiTypeObject())->set_own_klass(this);
+    set_super(ObjectKlass::get_instance());
     set_name(new HiString("int"));
 }
 
@@ -30,6 +33,16 @@ void IntegerKlass::print(HiObject* obj) {
     assert(int_obj && (int_obj->klass() == this));
 
     printf("%d", int_obj->value());
+}
+
+HiObject* IntegerKlass::allocate_instance(ArrayList<HiObject*>* args) {
+    if (!args || args->length() == 0) {
+        return new HiInteger(0);
+    }
+    else {
+        int value = ((HiInteger*)(args->get(0)))->value();
+        return new HiInteger(value);
+    }
 }
 
 HiObject* IntegerKlass::greater(HiObject* x, HiObject* y) {

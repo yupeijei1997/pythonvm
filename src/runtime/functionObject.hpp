@@ -29,6 +29,8 @@ public:
 };
 
 HiObject* len(ArrayList<HiObject*>* args);
+HiObject* isinstance(ArrayList<HiObject*>* args);
+HiObject* type_of(ArrayList<HiObject*>* args);
 
 typedef HiObject* (*NativeFuncPointer)(ArrayList<HiObject*>* args);
 

@@ -17,6 +17,8 @@ public:
 
     virtual void print(HiObject* obj);
 
+    virtual HiObject* allocate_instance(ArrayList<HiObject*>* args);
+
     virtual HiObject* greater(HiObject* x, HiObject* y);
     virtual HiObject* less(HiObject* x, HiObject* y);
     virtual HiObject* equal(HiObject* x, HiObject* y);

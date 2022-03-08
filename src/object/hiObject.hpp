@@ -4,6 +4,17 @@
 #include <assert.h>
 #include "object/klass.hpp"
 
+class ObjectKlass : public Klass {
+private:
+    ObjectKlass();
+    static ObjectKlass* instance;
+
+public:
+    static ObjectKlass* get_instance();
+
+    void initialize();
+};
+
 class HiObject {
 private:
     Klass* _klass;
@@ -39,6 +50,33 @@ public:
     HiObject* next();
 
     HiObject* getattr(HiObject* x);
+};
+
+/*
+ * meta-klass for the object system.
+ */
+class TypeKlass : public Klass {
+private:
+    TypeKlass() {}
+    static TypeKlass* instance;
+
+public:
+    static TypeKlass* get_instance();
+    void initialize();
+
+    virtual void print(HiObject* obj);
+};
+
+
+class HiTypeObject : public HiObject {
+private:
+    Klass* _own_klass;
+
+public:
+    HiTypeObject();
+
+    void set_own_klass(Klass* k);
+    Klass* own_klass() { return _own_klass; }
 };
 
 #endif

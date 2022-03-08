@@ -36,7 +36,38 @@ void ListKlass::initialize() {
     klass_dict->put(new HiString("reverse"), new FunctionObject(list_reverse));
     klass_dict->put(new HiString("sort"), new FunctionObject(list_sort));
     set_klass_dict(klass_dict);
+
+    (new HiTypeObject())->set_own_klass(this);
+    set_super(ObjectKlass::get_instance());
     set_name(new HiString("list"));
+}
+
+void ListKlass::print(HiObject* obj) {
+    HiList* lst_obj = (HiList*)obj;
+    assert(lst_obj && lst_obj->klass() == this);
+
+    printf("[");
+
+    int size = lst_obj->size();
+    if (size >= 1) {
+        lst_obj->get(0)->print();
+    }
+
+    for (int i = 1; i < size; ++i) {
+        printf(",");
+        lst_obj->get(i)->print();
+    }
+
+    printf("]");
+}
+
+HiObject* ListKlass::allocate_instance(ArrayList<HiObject*>* args) {
+    if (!args || args->length() == 0) {
+        return new HiList();
+    }
+    else {
+        return args->get(0);
+    }
 }
 
 HiObject* ListKlass::add(HiObject* x, HiObject* y) {
@@ -71,25 +102,6 @@ HiObject* ListKlass::mul(HiObject* x, HiObject* y) {
         }
     }
     return z;
-}
-
-void ListKlass::print(HiObject* obj) {
-    HiList* lst_obj = (HiList*)obj;
-    assert(lst_obj && lst_obj->klass() == this);
-
-    printf("[");
-
-    int size = lst_obj->size();
-    if (size >= 1) {
-        lst_obj->get(0)->print();
-    }
-
-    for (int i = 1; i < size; ++i) {
-        printf(",");
-        lst_obj->get(i)->print();
-    }
-
-    printf("]");
 }
 
 HiObject* ListKlass::less(HiObject* x, HiObject* y) {

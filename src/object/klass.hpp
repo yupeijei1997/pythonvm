@@ -3,6 +3,7 @@
 
 #include "util/arrayList.hpp"
 
+class HiTypeObject;
 class HiString;
 class HiObject;
 class HiDict;
@@ -10,6 +11,7 @@ class HiDict;
 class Klass {
 private:
     Klass* _super;
+    HiTypeObject* _type_object;
     HiString* _name;
     HiDict* _klass_dict;
 
@@ -18,6 +20,9 @@ public:
 
     void set_super(Klass* super) { _super = super; }
     Klass* super() { return _super; }
+
+    void set_type_object(HiTypeObject* x) { _type_object = x; }
+    HiTypeObject* type_object() { return _type_object; }
 
     void set_name(HiString* x) { _name = x; }
     HiString* name() { return _name; }
@@ -40,6 +45,8 @@ public:
     virtual HiObject* mul(HiObject* x, HiObject* y) { return 0; }
     virtual HiObject* div(HiObject* x, HiObject* y) { return 0; }
     virtual HiObject* mod(HiObject* x, HiObject* y) { return 0; }
+
+    virtual HiObject* allocate_instance(ArrayList<HiObject*>* args) { return 0; }
 
     virtual HiObject* len(HiObject* x) { return 0; }
     virtual HiObject* subscr(HiObject* x, HiObject* y) { return 0; }
