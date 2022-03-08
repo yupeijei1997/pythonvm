@@ -13,6 +13,10 @@ public:
     static ObjectKlass* get_instance();
 
     void initialize();
+
+    virtual void print(HiObject* obj);
+
+    virtual HiObject* allocate_instance(ArrayList<HiObject*>* args);
 };
 
 class HiObject {
@@ -20,6 +24,8 @@ private:
     Klass* _klass;
 
 public:
+    HiObject();
+
     Klass* klass() { assert(_klass != nullptr); return _klass; }
     void set_klass(Klass* klass) { _klass = klass; }
 

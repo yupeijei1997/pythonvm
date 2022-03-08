@@ -21,3 +21,6 @@ print g
 
 h = dict({1: "abc", "d": 2})
 print h
+
+i = object()
+print i

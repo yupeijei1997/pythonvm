@@ -4,6 +4,10 @@
 #include "runtime/universe.hpp"
 #include "runtime/functionObject.hpp"
 
+HiObject::HiObject() {
+    set_klass(ObjectKlass::get_instance());
+}
+
 ObjectKlass* ObjectKlass::instance = nullptr;
 
 ObjectKlass::ObjectKlass() {
@@ -22,6 +26,14 @@ void ObjectKlass::initialize() {
     set_klass_dict(new HiDict());
     (new HiTypeObject())->set_own_klass(this);
     set_name(new HiString("object"));
+}
+
+void ObjectKlass::print(HiObject* obj) {
+    printf("<object object at 0x%lx>", obj);
+}
+
+HiObject* ObjectKlass::allocate_instance(ArrayList<HiObject*>* args) {
+    return new HiObject();
 }
 
 void HiObject::print() {
