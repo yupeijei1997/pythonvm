@@ -41,7 +41,7 @@ void StringKlass::initialize() {
     set_klass_dict(klass_dict);
 
     (new HiTypeObject())->set_own_klass(this);
-    set_super(ObjectKlass::get_instance());
+    add_super(ObjectKlass::get_instance());
     set_name(new HiString("str"));
 }
 
@@ -78,7 +78,7 @@ void StringKlass::print(HiObject* obj) {
     }
 }
 
-HiObject* StringKlass::allocate_instance(ArrayList<HiObject*>* args) {
+HiObject* StringKlass::allocate_instance(HiObject* callable, ArrayList<HiObject*>* args) {
     if (!args || args->length() == 0) {
         return new HiString("");
     }

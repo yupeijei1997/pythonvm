@@ -10,7 +10,7 @@
 
 class FunctionKlass : public Klass {
 private:
-    FunctionKlass() {}
+    FunctionKlass();
     static FunctionKlass* instance;
 
 public:

@@ -14,6 +14,11 @@ FunctionKlass* FunctionKlass::get_instance() {
     return instance;
 }
 
+FunctionKlass::FunctionKlass() {
+    (new HiTypeObject())->set_own_klass(this);
+    set_name(new HiString("func"));
+}
+
 void FunctionKlass::print(HiObject* obj) {
     printf("<function : ");
     FunctionObject* fo = (FunctionObject*)obj;
@@ -71,7 +76,7 @@ NativeFunctionKlass* NativeFunctionKlass::get_instance() {
 }
 
 NativeFunctionKlass::NativeFunctionKlass() {
-    set_super(FunctionKlass::get_instance());
+    add_super(FunctionKlass::get_instance());
 }
 
 HiObject* len(ArrayList<HiObject*>* args) {
@@ -94,12 +99,14 @@ HiObject* isinstance(ArrayList<HiObject*>* args) {
 
     Klass* k = x->klass();
     while (k != nullptr) {
-        if (k == ((HiTypeObject*)y)->own_klass()) {
+        if (k->type_object() == y) {
             return Universe::HiTrue;
         }
 
-        k = k->super();
+        k = k->super()->own_klass();
     }
+
+
 
     return Universe::HiFalse;
 }
@@ -143,7 +150,7 @@ bool MethodObject::is_function(HiObject* x) {
     }
 
     while (k->super() != nullptr) {
-        k = k->super();
+        k = k->super()->own_klass();
         if (k == (Klass*)FunctionKlass::get_instance()) {
             return true;
         }

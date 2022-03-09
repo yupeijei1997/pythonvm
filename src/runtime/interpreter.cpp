@@ -56,7 +56,7 @@ void Interpreter::build_frame(HiObject* callable, ArrayList<HiObject*>* args, in
         _frame = frame;
     }
     else if (callable->klass() == TypeKlass::get_instance()) {
-        HiObject* inst = ((HiTypeObject*)callable)->own_klass()->allocate_instance(args);
+        HiObject* inst = ((HiTypeObject*)callable)->own_klass()->allocate_instance(callable, args);
         PUSH(inst);
     }
 }
@@ -182,6 +182,10 @@ void Interpreter::eval_frame() {
                 }
             }
             PUSH(v);
+            break;
+
+        case ByteCode::LOAD_LOCALS:
+            PUSH(_frame->locals());
             break;
 
         case ByteCode::STORE_NAME:
@@ -426,6 +430,14 @@ void Interpreter::eval_frame() {
 
         case ByteCode::BUILD_MAP:
             v = new HiDict();
+            PUSH(v);
+            break;
+
+        case ByteCode::BUILD_CLASS:
+            u = POP();
+            v = POP();
+            w = POP();
+            v = Klass::create_klass(u, v, w);
             PUSH(v);
             break;
 

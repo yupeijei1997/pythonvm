@@ -3,6 +3,7 @@
 #include "object/hiDict.hpp"
 #include "runtime/universe.hpp"
 #include "runtime/functionObject.hpp"
+#include "runtime/stringTable.hpp"
 
 HiObject::HiObject() {
     set_klass(ObjectKlass::get_instance());
@@ -11,7 +12,8 @@ HiObject::HiObject() {
 ObjectKlass* ObjectKlass::instance = nullptr;
 
 ObjectKlass::ObjectKlass() {
-    set_super(nullptr);
+    // 不删除则会造成死循环
+    // add_super(nullptr);
 }
 
 ObjectKlass* ObjectKlass::get_instance() {
@@ -152,15 +154,35 @@ TypeKlass* TypeKlass::get_instance() {
 void TypeKlass::initialize() {
     set_klass_dict(new HiDict());
     (new HiTypeObject())->set_own_klass(this);
-    set_super(ObjectKlass::get_instance());
+    add_super(ObjectKlass::get_instance());
     set_name(new HiString("type"));
 }
 
 void TypeKlass::print(HiObject* obj) {
     assert(obj && obj->klass() == this);
-    printf("<type ");
     Klass* own_klass = ((HiTypeObject*)obj)->own_klass();
-    
+    HiString* name = own_klass->name();
+    if (name->equal(StringTable::get_instance()->object_str) == Universe::HiTrue ||
+        name->equal(StringTable::get_instance()->type_str) == Universe::HiTrue ||
+        name->equal(StringTable::get_instance()->int_str) == Universe::HiTrue ||
+        name->equal(StringTable::get_instance()->str_str) == Universe::HiTrue ||
+        name->equal(StringTable::get_instance()->list_str) == Universe::HiTrue ||
+        name->equal(StringTable::get_instance()->dict_str) == Universe::HiTrue) {
+        printf("<type ");
+    }
+    else {
+        printf("<class ");
+    }
+
+    HiDict* attr_dict = own_klass->klass_dict();
+    if (attr_dict) {
+        HiObject* mod = attr_dict->get(StringTable::get_instance()->mod_str);
+        if (mod != Universe::HiNone) {
+            mod->print();
+            printf(".");
+        }
+    }
+
     own_klass->name()->print();
     printf(">");
 }

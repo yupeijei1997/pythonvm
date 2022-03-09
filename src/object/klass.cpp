@@ -1,5 +1,6 @@
 #include "object/klass.hpp"
 #include "object/hiInteger.hpp"
+#include "object/hiList.hpp"
 #include "runtime/universe.hpp"
 
 int Klass::compare_klass(Klass* x, Klass* y) {
@@ -20,4 +21,46 @@ int Klass::compare_klass(Klass* x, Klass* y) {
     else {
         return 1;
     }
+}
+
+HiObject* Klass::create_klass(HiObject* x, HiObject* supers, HiObject* name) {
+    assert(x && x->klass() == DictKlass::get_instance());
+    assert(supers && supers->klass() == ListKlass::get_instance());
+    assert(name && name->klass() == StringKlass::get_instance());
+
+    Klass* new_klass = new Klass();
+    HiDict* klass_dict = (HiDict*)x;
+    HiList* supers_list = (HiList*)supers;
+    HiString* name_str = (HiString*)name;
+    new_klass->set_klass_dict(klass_dict);
+    new_klass->set_super_list(supers_list);
+    new_klass->set_name(name_str);
+
+    HiTypeObject* type_obj = new HiTypeObject();
+    type_obj->set_own_klass(new_klass);
+
+    return type_obj;
+}
+
+void Klass::add_super(Klass* klass) {
+    if (_super == nullptr) {
+        _super = new HiList();
+    }
+
+    _super->append(klass->type_object());
+}
+
+HiTypeObject* Klass::super() {
+    if (_super == nullptr || _super->size() <= 0) {
+        return nullptr;
+    }
+
+    return (HiTypeObject*)(_super->get(0));
+}
+
+HiObject* Klass::allocate_instance(HiObject* callable, ArrayList<HiObject*>* args) {
+    HiObject* inst = new HiObject();
+    Klass* k = ((HiTypeObject*)callable)->own_klass();
+    inst->set_klass(k);
+    return inst;
 }

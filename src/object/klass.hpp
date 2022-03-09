@@ -7,10 +7,11 @@ class HiTypeObject;
 class HiString;
 class HiObject;
 class HiDict;
+class HiList;
 
 class Klass {
 private:
-    Klass* _super;
+    HiList* _super;
     HiTypeObject* _type_object;
     HiString* _name;
     HiDict* _klass_dict;
@@ -18,8 +19,11 @@ private:
 public:
     Klass() {}
 
-    void set_super(Klass* super) { _super = super; }
-    Klass* super() { return _super; }
+    static HiObject* create_klass(HiObject* x, HiObject* supers, HiObject* name);
+
+    void add_super(Klass* x);
+    HiTypeObject* super();
+    void set_super_list(HiList* x) { _super = x; }
 
     void set_type_object(HiTypeObject* x) { _type_object = x; }
     HiTypeObject* type_object() { return _type_object; }
@@ -46,7 +50,7 @@ public:
     virtual HiObject* div(HiObject* x, HiObject* y) { return 0; }
     virtual HiObject* mod(HiObject* x, HiObject* y) { return 0; }
 
-    virtual HiObject* allocate_instance(ArrayList<HiObject*>* args) { return 0; }
+    virtual HiObject* allocate_instance(HiObject* callable, ArrayList<HiObject*>* args);
 
     virtual HiObject* len(HiObject* x) { return 0; }
     virtual HiObject* subscr(HiObject* x, HiObject* y) { return 0; }

@@ -17,7 +17,7 @@ public:
 
     virtual void print(HiObject* obj);
 
-    virtual HiObject* allocate_instance(ArrayList<HiObject*>* args);
+    virtual HiObject* allocate_instance(HiObject* callable, ArrayList<HiObject*>* args);
 
     virtual HiObject* less(HiObject* x, HiObject* y);
     virtual HiObject* len(HiObject* obj);
@@ -36,7 +36,6 @@ public:
     HiString(const char* x, int length);
 
     const char* value() { return _value; }
-    char* value2() { return _value; }
     int length() { return _length; }
 };
 
