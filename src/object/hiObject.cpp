@@ -38,6 +38,10 @@ HiObject* ObjectKlass::allocate_instance(ArrayList<HiObject*>* args) {
     return new HiObject();
 }
 
+void HiObject::init_dict() {
+    _obj_dict = new HiDict();
+}
+
 void HiObject::print() {
     if (klass() == NativeFunctionKlass::get_instance()) {
         TypeKlass::get_instance()->type_object()->print();
@@ -119,15 +123,11 @@ HiObject* HiObject::unpack(HiObject* x) {
 }
 
 HiObject* HiObject::getattr(HiObject* x) {
-    HiObject* result = klass()->klass_dict()->get(x);
-    if (result == Universe::HiNone) {
-        return result;
-    }
+    return klass()->getattr(this, x);
+}
 
-    if (MethodObject::is_function(result)) {
-        result = new MethodObject(this, (FunctionObject*)result);
-    }
-    return result;
+HiObject* HiObject::setattr(HiObject* x, HiObject* y) {
+    return klass()->setattr(this, x, y);
 }
 
 HiObject* HiObject::iter() {

@@ -62,6 +62,8 @@ public:
     virtual HiObject* iter(HiObject* x) { return 0; }
     virtual HiObject* next(HiObject* x) { return 0; }
     virtual HiObject* call(ArrayList<HiObject*>* args) { return 0; }
+    virtual HiObject* getattr(HiObject* x, HiObject* y);
+    virtual HiObject* setattr(HiObject* x, HiObject* y, HiObject* z);
 };
 
 #endif

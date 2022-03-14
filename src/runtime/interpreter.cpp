@@ -220,6 +220,13 @@ void Interpreter::eval_frame() {
             _frame->closure()->set(op_arg, POP());
             break;
 
+        case ByteCode::STORE_ATTR:
+            u = POP();
+            v = _frame->names()->get(op_arg);
+            w = POP();
+            u->setattr(v, w);
+            break;
+
         case ByteCode::DELETE_SUBSCR:
             v = POP();
             w = POP();

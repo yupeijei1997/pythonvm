@@ -4,7 +4,7 @@ CodeObject::CodeObject(int argcount, int nlocals, int stacksize, int flag, HiStr
     ArrayList<HiObject*>* consts, ArrayList<HiObject*>* names,
     ArrayList<HiObject*>* varnames,
     ArrayList<HiObject*>* freevars, ArrayList<HiObject*>* cellvars,
-    HiString* coname, HiString* cofilename, int lineno, HiString* notable) :
+    HiString* cofilename, HiString* coname, int lineno, HiString* notable) :
         _argcount(argcount),
         _nlocals(nlocals),
         _stack_size(stacksize),
@@ -15,8 +15,8 @@ CodeObject::CodeObject(int argcount, int nlocals, int stacksize, int flag, HiStr
         _var_names(varnames),
         _free_vars(freevars),
         _cell_vars(cellvars),
-        _co_name(coname),
         _co_file_name(cofilename),
+        _co_name(coname),
         _lineno(lineno),
         _notable(notable) {
 }

@@ -21,8 +21,8 @@ public:
     ArrayList<HiObject*>* _free_vars;
     ArrayList<HiObject*>* _cell_vars;
 
-    HiString* _co_name;
     HiString* _co_file_name;
+    HiString* _co_name;
     
     int _lineno;
     HiString* _notable;
@@ -31,7 +31,7 @@ public:
         ArrayList<HiObject*>* consts, ArrayList<HiObject*>* names,
         ArrayList<HiObject*>* varnames,
         ArrayList<HiObject*>* cellvars, ArrayList<HiObject*>* freevars,
-        HiString* coname, HiString* cofilename,
+        HiString* cofilename, HiString* coname,
         int lineno, HiString* notable);
 };
 

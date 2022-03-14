@@ -2,6 +2,7 @@
 #include "object/hiInteger.hpp"
 #include "object/hiList.hpp"
 #include "runtime/universe.hpp"
+#include "runtime/functionObject.hpp"
 
 int Klass::compare_klass(Klass* x, Klass* y) {
     if (x == y) {
@@ -63,4 +64,33 @@ HiObject* Klass::allocate_instance(HiObject* callable, ArrayList<HiObject*>* arg
     Klass* k = ((HiTypeObject*)callable)->own_klass();
     inst->set_klass(k);
     return inst;
+}
+
+HiObject* Klass::getattr(HiObject* x, HiObject* y) {
+    HiObject* result = Universe::HiNone;
+
+    if (x->obj_dict() != nullptr) {
+        result = x->obj_dict()->get(y);
+        if (result != Universe::HiNone) {
+            return result;
+        }
+    }
+
+    result = x->klass()->klass_dict()->get(y);
+    if (result != Universe::HiNone) {
+        return result;
+    }
+
+    if (MethodObject::is_function(result)) {
+        return new MethodObject(x, (FunctionObject*)result);
+    }
+}
+
+HiObject* Klass::setattr(HiObject* x, HiObject* y, HiObject* z) {
+    if (x->obj_dict() == nullptr) {
+        x->init_dict();
+    }
+
+    x->obj_dict()->put(y, z);
+    return Universe::HiNone;
 }

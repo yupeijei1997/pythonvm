@@ -22,12 +22,16 @@ public:
 class HiObject {
 private:
     Klass* _klass;
+    HiDict* _obj_dict;
 
 public:
     HiObject();
 
     Klass* klass() { assert(_klass != nullptr); return _klass; }
     void set_klass(Klass* klass) { _klass = klass; }
+
+    HiDict* obj_dict() { return _obj_dict; }
+    void init_dict();
 
     virtual void print();
 
@@ -56,6 +60,7 @@ public:
     HiObject* next();
 
     HiObject* getattr(HiObject* x);
+    HiObject* setattr(HiObject* x, HiObject* y);;
 };
 
 /*
