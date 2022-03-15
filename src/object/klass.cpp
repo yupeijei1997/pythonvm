@@ -5,6 +5,7 @@
 #include "runtime/universe.hpp"
 #include "runtime/stringTable.hpp"
 #include "runtime/functionObject.hpp"
+#include "runtime/interpreter.hpp"
 
 int Klass::compare_klass(Klass* x, Klass* y) {
     if (x == y) {
@@ -80,6 +81,12 @@ HiObject* Klass::allocate_instance(HiObject* callable, ArrayList<HiObject*>* arg
     HiObject* inst = new HiObject();
     Klass* k = ((HiTypeObject*)callable)->own_klass();
     inst->set_klass(k);
+
+    HiObject* constructor = inst->getattr(StringTable::get_instance()->init_str);
+
+    if (constructor != Universe::HiNone) {
+        HiObject* result = Interpreter::get_instance()->call_virtual(constructor, args);
+    }
     return inst;
 }
 

@@ -113,6 +113,7 @@ public:
     FunctionObject* func() { return _func; }
 
     static bool is_function(HiObject* x);
+    static bool is_method(HiObject* x);
 };
 
 #endif

@@ -1,6 +1,4 @@
 #include <stdio.h>
-#include <typeinfo>
-#include <iostream>
 #include "runtime/interpreter.hpp"
 #include "runtime/universe.hpp"
 #include "runtime/functionObject.hpp"
@@ -20,7 +18,15 @@
 #define HI_TRUE Universe::HiTrue
 #define HI_FALSE Universe::HiFalse
 
-using namespace std;
+Interpreter* Interpreter::_instance = nullptr;
+
+Interpreter* Interpreter::get_instance() {
+    if (_instance == nullptr) {
+        _instance = new Interpreter();
+    }
+
+    return _instance;
+}
 
 Interpreter::Interpreter() {
     _builtins = new Map<HiObject*, HiObject*>();
@@ -70,6 +76,28 @@ void Interpreter::destory_frame() {
 void Interpreter::leave_frame() {
     destory_frame();
     PUSH(_ret_value);
+}
+
+HiObject* Interpreter::call_virtual(HiObject* func, ArrayList<HiObject*>* args) {
+    if (MethodObject::is_method(func)) {
+        MethodObject* method = (MethodObject*)func;
+        if (!args) {
+            args = new ArrayList<HiObject*>(1);
+        }
+        args->insert(0, method->owner());
+        return call_virtual(method->func(), args);
+    }
+    else if (MethodObject::is_function(func)) {
+        FrameObject* frame = new FrameObject((FunctionObject*)func, args, args->length());
+        frame->set_entry_frame(true);
+        frame->set_sender(_frame);
+        _frame = frame;
+        eval_frame();
+        destory_frame();
+        return _ret_value;
+    }
+
+    return Universe::HiNone;
 }
 
 void Interpreter::run(CodeObject* codes) {
@@ -262,7 +290,7 @@ void Interpreter::eval_frame() {
 
         case ByteCode::RETURN_VALUE:
             _ret_value = POP();
-            if (_frame->is_first_frame()) {
+            if (_frame->is_first_frame() || _frame->is_entry_frame()) {
                 return;
             }
             leave_frame();

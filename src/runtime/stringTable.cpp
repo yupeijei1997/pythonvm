@@ -19,4 +19,5 @@ StringTable::StringTable() {
     str_str = new HiString("str");
     list_str = new HiString("list");
     dict_str = new HiString("dict");  
+    init_str = new HiString("__init__");
 }

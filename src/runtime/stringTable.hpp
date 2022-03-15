@@ -18,6 +18,7 @@ public:
     HiString* str_str;
     HiString* list_str;
     HiString* dict_str;
+    HiString* init_str;
 };
 
 #endif

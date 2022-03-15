@@ -158,3 +158,11 @@ bool MethodObject::is_function(HiObject* x) {
 
     return false;
 }
+
+bool MethodObject::is_method(HiObject* x) {
+    if (x->klass() == MethodKlass::get_instance()) {
+        return true;
+    }
+
+    return false;
+}

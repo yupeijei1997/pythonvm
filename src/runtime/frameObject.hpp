@@ -45,6 +45,7 @@ public:
     int _pc;
 
     FrameObject* _sender;
+    bool _entry_frame;
 
 public:
     FrameObject(CodeObject* codes);
@@ -58,6 +59,8 @@ public:
 
     void set_sender(FrameObject* x) { _sender = x; }
     FrameObject* sender() { return _sender; }
+    
+    void set_entry_frame(bool x) { _entry_frame = x; }
 
     ArrayList<HiObject*>* stack() { return _stack; }
     ArrayList<Block*>* loop_stack() { return _loop_stack; }
@@ -69,6 +72,7 @@ public:
     HiList* closure() { return _closure; }
 
     bool is_first_frame() { return _sender == nullptr; }
+    bool is_entry_frame() { return _entry_frame; }
     bool has_more_codes();
     unsigned char get_op_code();
     int get_op_arg();
