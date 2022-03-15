@@ -77,13 +77,14 @@ HiObject* Klass::getattr(HiObject* x, HiObject* y) {
     }
 
     result = x->klass()->klass_dict()->get(y);
-    if (result != Universe::HiNone) {
+    if (result == Universe::HiNone) {
         return result;
     }
 
     if (MethodObject::is_function(result)) {
-        return new MethodObject(x, (FunctionObject*)result);
+        result = new MethodObject(x, (FunctionObject*)result);
     }
+    return result;
 }
 
 HiObject* Klass::setattr(HiObject* x, HiObject* y, HiObject* z) {
