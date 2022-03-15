@@ -1,7 +1,9 @@
+#include <stdio.h>
 #include "object/klass.hpp"
 #include "object/hiInteger.hpp"
 #include "object/hiList.hpp"
 #include "runtime/universe.hpp"
+#include "runtime/stringTable.hpp"
 #include "runtime/functionObject.hpp"
 
 int Klass::compare_klass(Klass* x, Klass* y) {
@@ -22,6 +24,21 @@ int Klass::compare_klass(Klass* x, Klass* y) {
     else {
         return 1;
     }
+}
+
+void Klass::print(HiObject* x) {
+    printf("<");
+    HiDict* attr_dict = x->klass()->klass_dict();
+    if (attr_dict) {
+        HiObject* mod = attr_dict->get(StringTable::get_instance()->mod_str);
+        if (mod != Universe::HiNone) {
+            mod->print();
+            printf(".");
+        }
+    }
+    x->klass()->name()->print();
+    printf(" object at ");
+    printf("%p>", x);
 }
 
 HiObject* Klass::create_klass(HiObject* x, HiObject* supers, HiObject* name) {
