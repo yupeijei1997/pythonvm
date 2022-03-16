@@ -76,6 +76,7 @@ public:
     void initialize();
 
     virtual void print(HiObject* obj);
+    virtual HiObject* setattr(HiObject* x, HiObject* y, HiObject* z);
 };
 
 

@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-#define BUFFER_LEN 4096
+#define BUFFER_LEN 16384
 
 
 class BufferedInputStream {

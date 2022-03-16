@@ -187,6 +187,12 @@ void TypeKlass::print(HiObject* obj) {
     printf(">");
 }
 
+HiObject* TypeKlass::setattr(HiObject* x, HiObject* y, HiObject* z) {
+    HiTypeObject* type_obj = (HiTypeObject*)x;
+    type_obj->own_klass()->klass_dict()->put(y, z);
+    return Universe::HiNone;
+}
+
 HiTypeObject::HiTypeObject() {
     set_klass(TypeKlass::get_instance());
 }

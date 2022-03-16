@@ -15,6 +15,7 @@ FrameObject::FrameObject(CodeObject* codes) {
     _codes = codes;
     _pc = 0;
     _sender = nullptr;
+    _entry_frame = false;
 }
 
 FrameObject::FrameObject(FunctionObject* func, ArrayList<HiObject*>* args, int op_arg) {
@@ -106,6 +107,7 @@ FrameObject::FrameObject(FunctionObject* func, ArrayList<HiObject*>* args, int o
 
     _pc = 0;
     _sender = nullptr;
+    _entry_frame = false;
 }
 
 int FrameObject::get_op_arg() {
