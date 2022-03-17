@@ -37,22 +37,23 @@ public:
     static int compare_klass(Klass* x, Klass* y);
     virtual void print(HiObject* obj);
 
-    virtual HiObject* greater(HiObject* x, HiObject* y) { return 0; }
-    virtual HiObject* less(HiObject* x, HiObject* y) { return 0; }
-    virtual HiObject* equal(HiObject* x, HiObject* y) { return 0; }
-    virtual HiObject* not_equal(HiObject* x, HiObject* y) { return 0; }
-    virtual HiObject* ge(HiObject* x, HiObject* y) { return 0; }
-    virtual HiObject* le(HiObject* x, HiObject* y) { return 0; }
+    virtual HiObject* greater(HiObject* x, HiObject* y);
+    virtual HiObject* less(HiObject* x, HiObject* y);
+    virtual HiObject* equal(HiObject* x, HiObject* y);
+    virtual HiObject* not_equal(HiObject* x, HiObject* y);
+    virtual HiObject* ge(HiObject* x, HiObject* y);
+    virtual HiObject* le(HiObject* x, HiObject* y);
 
-    virtual HiObject* add(HiObject* x, HiObject* y) { return 0; }
-    virtual HiObject* sub(HiObject* x, HiObject* y) { return 0; }
-    virtual HiObject* mul(HiObject* x, HiObject* y) { return 0; }
-    virtual HiObject* div(HiObject* x, HiObject* y) { return 0; }
-    virtual HiObject* mod(HiObject* x, HiObject* y) { return 0; }
+    virtual HiObject* add(HiObject* x, HiObject* y);
+    virtual HiObject* sub(HiObject* x, HiObject* y);
+    virtual HiObject* mul(HiObject* x, HiObject* y);
+    virtual HiObject* div(HiObject* x, HiObject* y);
+    virtual HiObject* mod(HiObject* x, HiObject* y);
 
+    virtual HiObject* find_and_call(HiObject* x, ArrayList<HiObject*>* args, HiObject* func_name);
     virtual HiObject* allocate_instance(HiObject* callable, ArrayList<HiObject*>* args);
 
-    virtual HiObject* len(HiObject* x) { return 0; }
+    virtual HiObject* len(HiObject* x);
     virtual HiObject* subscr(HiObject* x, HiObject* y) { return 0; }
     virtual HiObject* contains(HiObject* x, HiObject* y) { return 0; }
     virtual HiObject* not_contains(HiObject* x, HiObject* y) { return 0; }

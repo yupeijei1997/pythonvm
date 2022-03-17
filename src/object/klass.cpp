@@ -7,6 +7,9 @@
 #include "runtime/functionObject.hpp"
 #include "runtime/interpreter.hpp"
 
+#define ST(x) StringTable::get_instance()->STR(x)
+#define STR(x) x##_str
+
 int Klass::compare_klass(Klass* x, Klass* y) {
     if (x == y) {
         return 0;
@@ -77,6 +80,84 @@ HiTypeObject* Klass::super() {
     return (HiTypeObject*)(_super->get(0));
 }
 
+HiObject* Klass::greater(HiObject* x, HiObject* y) {
+    ArrayList<HiObject*>* args = new ArrayList<HiObject*>();
+    args->add(y);
+    return find_and_call(x, args, ST(gt));
+}
+
+HiObject* Klass::less(HiObject* x, HiObject* y) {
+    ArrayList<HiObject*>* args = new ArrayList<HiObject*>();
+    args->add(y);
+    return find_and_call(x, args, ST(lt));
+}
+
+HiObject* Klass::equal(HiObject* x, HiObject* y) {
+    ArrayList<HiObject*>* args = new ArrayList<HiObject*>();
+    args->add(y);
+    return find_and_call(x, args, ST(eq));
+}
+
+HiObject* Klass::not_equal(HiObject* x, HiObject* y) {
+    ArrayList<HiObject*>* args = new ArrayList<HiObject*>();
+    args->add(y);
+    return find_and_call(x, args, ST(ne));
+}
+
+HiObject* Klass::ge(HiObject* x, HiObject* y) {
+    ArrayList<HiObject*>* args = new ArrayList<HiObject*>();
+    args->add(y);
+    return find_and_call(x, args, ST(ge));
+}
+
+HiObject* Klass::le(HiObject* x, HiObject* y) {
+    ArrayList<HiObject*>* args = new ArrayList<HiObject*>();
+    args->add(y);
+    return find_and_call(x, args, ST(le));
+}
+
+HiObject* Klass::add(HiObject* x, HiObject* y) {
+    ArrayList<HiObject*>* args = new ArrayList<HiObject*>();
+    args->add(y);
+    return find_and_call(x, args, ST(add));
+}
+
+HiObject* Klass::sub(HiObject* x, HiObject* y) {
+    ArrayList<HiObject*>* args = new ArrayList<HiObject*>();
+    args->add(y);
+    return find_and_call(x, args, ST(sub));
+}
+
+HiObject* Klass::mul(HiObject* x, HiObject* y) {
+    ArrayList<HiObject*>* args = new ArrayList<HiObject*>();
+    args->add(y);
+    return find_and_call(x, args, ST(mul));
+}
+
+HiObject* Klass::div(HiObject* x, HiObject* y) {
+    ArrayList<HiObject*>* args = new ArrayList<HiObject*>();
+    args->add(y);
+    return find_and_call(x, args, ST(div));
+}
+
+HiObject* Klass::mod(HiObject* x, HiObject* y) {
+    ArrayList<HiObject*>* args = new ArrayList<HiObject*>();
+    args->add(y);
+    return find_and_call(x, args, ST(modulo));
+}
+
+HiObject* Klass::find_and_call(HiObject* x, ArrayList<HiObject*>* args, HiObject* func_name) {
+    HiObject* func = x->getattr(func_name);
+    if (func != Universe::HiNone) {
+        return Interpreter::get_instance()->call_virtual(func, args);
+    }
+
+    printf("class");
+    x->klass()->name()->print();
+    printf("Error : unsupport operation for class ");
+    assert(false);
+}
+
 HiObject* Klass::allocate_instance(HiObject* callable, ArrayList<HiObject*>* args) {
     HiObject* inst = new HiObject();
     Klass* k = ((HiTypeObject*)callable)->own_klass();
@@ -88,6 +169,10 @@ HiObject* Klass::allocate_instance(HiObject* callable, ArrayList<HiObject*>* arg
         HiObject* result = Interpreter::get_instance()->call_virtual(constructor, args);
     }
     return inst;
+}
+
+HiObject* Klass::len(HiObject* x) {
+    return find_and_call(x, nullptr, ST(len));
 }
 
 HiObject* Klass::getattr(HiObject* x, HiObject* y) {

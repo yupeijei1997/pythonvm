@@ -282,10 +282,28 @@ void Interpreter::eval_frame() {
             PUSH(w->add(v));
             break;
 
+        case ByteCode::BINARY_SUBTRACT:
+            v = POP();
+            w = POP();
+            PUSH(w->sub(v));
+            break;
+
         case ByteCode::BINARY_MULTIPLY:
             v = POP();
             w = POP();
-            PUSH(v->mul(w));
+            PUSH(w->mul(v));
+            break;
+
+        case ByteCode::BINARY_DIVIDE:
+            v = POP();
+            w = POP();
+            PUSH(w->div(v));
+            break;
+
+        case ByteCode::BINARY_MODULO:
+            v = POP();
+            w = POP();
+            PUSH(w->mod(v));
             break;
 
         case ByteCode::RETURN_VALUE:
